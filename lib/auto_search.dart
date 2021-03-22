@@ -68,6 +68,8 @@ class AutoSearchInput extends StatefulWidget {
 
   final SearchMode searchMode;
 
+  final bool caseSensitive;
+
   const AutoSearchInput({
     @required this.data,
     @required this.maxElementsToDisplay,
@@ -89,6 +91,7 @@ class AutoSearchInput extends StatefulWidget {
     this.onEditingComplete,
     this.bgColor = Colors.white,
     this.searchMode = SearchMode.CONTAINS,
+    this.caseSensitive = false,
   }) : assert(data != null, maxElementsToDisplay != null);
 
   @override
@@ -118,13 +121,17 @@ class _AutoSearchInputState extends State<AutoSearchInput> {
     String textBefore = "";
     String textAfter = "";
     try {
-      String lowerCaseResult = result.toLowerCase();
-      String lowerCaseSearchText = _textEditingController.text.toLowerCase();
+      String lowerCaseResult =
+          widget.caseSensitive ? result : result.toLowerCase();
+      String lowerCaseSearchText = widget.caseSensitive
+          ? _textEditingController.text
+          : _textEditingController.text.toLowerCase();
       textSelected = result.substring(
           lowerCaseResult.indexOf(lowerCaseSearchText),
           lowerCaseResult.indexOf(lowerCaseSearchText) +
               lowerCaseSearchText.length);
-      String loserCaseTextSelected = textSelected.toLowerCase();
+      String loserCaseTextSelected =
+          widget.caseSensitive ? textSelected : textSelected.toLowerCase();
       textBefore =
           result.substring(0, lowerCaseResult.indexOf(loserCaseTextSelected));
       if (lowerCaseResult.indexOf(loserCaseTextSelected) + textSelected.length <
@@ -295,14 +302,17 @@ class _AutoSearchInputState extends State<AutoSearchInput> {
   }
 
   void onSearchTextChanges() {
+    String searchText = widget.caseSensitive
+        ? _textEditingController.text
+        : _textEditingController.text.toLowerCase();
     switch (widget.searchMode) {
       case SearchMode.STARTING_WITH:
         setState(() {
           results = widget.data
               .where(
-                (element) => element
-                    .toLowerCase()
-                    .startsWith(_textEditingController.text.toLowerCase()),
+                (element) =>
+                    (widget.caseSensitive ? element : element.toLowerCase())
+                        .startsWith(searchText),
               )
               .toList();
         });
@@ -311,9 +321,9 @@ class _AutoSearchInputState extends State<AutoSearchInput> {
         setState(() {
           results = widget.data
               .where(
-                (element) => element
-                    .toLowerCase()
-                    .contains(_textEditingController.text.toLowerCase()),
+                (element) =>
+                    (widget.caseSensitive ? element : element.toLowerCase())
+                        .contains(searchText),
               )
               .toList();
         });
@@ -323,8 +333,8 @@ class _AutoSearchInputState extends State<AutoSearchInput> {
           results = widget.data
               .where(
                 (element) =>
-                    element.toLowerCase() ==
-                    _textEditingController.text.toLowerCase(),
+                    (widget.caseSensitive ? element : element.toLowerCase()) ==
+                    searchText,
               )
               .toList();
         });
