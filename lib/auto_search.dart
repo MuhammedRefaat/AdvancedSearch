@@ -63,6 +63,11 @@ class AutoSearchInput extends StatefulWidget {
   ///onEditingComplete function
   final Function onEditingComplete;
 
+  ///List Background Color
+  final Color bgColor;
+
+  final SearchMode searchMode;
+
   const AutoSearchInput({
     @required this.data,
     @required this.maxElementsToDisplay,
@@ -82,6 +87,8 @@ class AutoSearchInput extends StatefulWidget {
     this.enabled = true,
     this.onSubmitted,
     this.onEditingComplete,
+    this.bgColor = Colors.white,
+    this.searchMode = SearchMode.CONTAINS,
   }) : assert(data != null, maxElementsToDisplay != null);
 
   @override
@@ -93,24 +100,11 @@ class _AutoSearchInputState extends State<AutoSearchInput> {
   bool isItemClicked = false;
 
   final TextEditingController _textEditingController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
-    _textEditingController
-      ..addListener(() {
-        setState(() {
-          results = widget.data
-              .where(
-                (element) => element
-                    .toLowerCase()
-                    .startsWith(_textEditingController.text.toLowerCase()),
-              )
-              .toList();
-          if (results.length > widget.maxElementsToDisplay) {
-            results = results.sublist(0, widget.maxElementsToDisplay);
-          }
-        });
-      });
+    _textEditingController..addListener(onSearchTextChanges);
   }
 
   @override
@@ -120,24 +114,54 @@ class _AutoSearchInputState extends State<AutoSearchInput> {
   }
 
   Widget _getRichText(String result) {
+    String textSelected = "";
+    String textBefore = "";
+    String textAfter = "";
+    try {
+      String lowerCaseResult = result.toLowerCase();
+      String lowerCaseSearchText = _textEditingController.text.toLowerCase();
+      textSelected = result.substring(
+          lowerCaseResult.indexOf(lowerCaseSearchText),
+          lowerCaseResult.indexOf(lowerCaseSearchText) +
+              lowerCaseSearchText.length);
+      String loserCaseTextSelected = textSelected.toLowerCase();
+      textBefore =
+          result.substring(0, lowerCaseResult.indexOf(loserCaseTextSelected));
+      if (lowerCaseResult.indexOf(loserCaseTextSelected) + textSelected.length <
+          result.length) {
+        textAfter = result.substring(
+            lowerCaseResult.indexOf(loserCaseTextSelected) +
+                textSelected.length,
+            result.length);
+      }
+    } catch (e) {
+      print(e.toString());
+    }
     return RichText(
       text: _textEditingController.text.length > 0
           ? TextSpan(
               children: [
                 if (_textEditingController.text.length > 0)
                   TextSpan(
-                    text:
-                        result.substring(0, _textEditingController.text.length),
+                    text: textBefore,
                     style: TextStyle(
                       fontSize: widget.fontSize,
-                      color: widget.selectedTextColor != null
-                          ? widget.selectedTextColor
-                          : Colors.black,
+                      color: widget.unSelectedTextColor != null
+                          ? widget.unSelectedTextColor
+                          : Colors.grey[400],
                     ),
                   ),
                 TextSpan(
-                  text: result.substring(
-                      _textEditingController.text.length, result.length),
+                  text: textSelected,
+                  style: TextStyle(
+                    fontSize: widget.fontSize,
+                    color: widget.selectedTextColor != null
+                        ? widget.selectedTextColor
+                        : Colors.black,
+                  ),
+                ),
+                TextSpan(
+                  text: textAfter,
                   style: TextStyle(
                     fontSize: widget.fontSize,
                     color: widget.unSelectedTextColor != null
@@ -163,58 +187,61 @@ class _AutoSearchInputState extends State<AutoSearchInput> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        TextField(
-          autocorrect: widget.autoCorrect,
-          enabled: widget.enabled,
-          onEditingComplete: widget.onEditingComplete,
-          onSubmitted: widget.onSubmitted,
-          onTap: () {
-            setState(() {
-              if (isItemClicked) {
-                isItemClicked = !isItemClicked;
-              }
-            });
-          },
-          controller: _textEditingController,
-          decoration: InputDecoration(
-            hintText: widget.hintText,
-            contentPadding: const EdgeInsets.all(10.0),
-            disabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                  color: widget.disabledBorderColor != null
+        Container(
+          margin: EdgeInsets.all(20),
+          child: TextField(
+            autocorrect: widget.autoCorrect,
+            enabled: widget.enabled,
+            onEditingComplete: widget.onEditingComplete,
+            onSubmitted: widget.onSubmitted,
+            onTap: () {
+              setState(() {
+                if (isItemClicked) {
+                  isItemClicked = !isItemClicked;
+                }
+              });
+            },
+            controller: _textEditingController,
+            decoration: InputDecoration(
+              hintText: widget.hintText,
+              contentPadding: const EdgeInsets.all(10.0),
+              disabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                    color: widget.disabledBorderColor != null
+                        ? widget.borderRadius
+                        : Colors.grey[200]),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(widget.borderRadius),
+                ),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: widget.enabledBorderColor != null
                       ? widget.borderRadius
-                      : Colors.grey[200]),
-              borderRadius: BorderRadius.all(
-                Radius.circular(widget.borderRadius),
+                      : Colors.grey[200],
+                ),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(widget.borderRadius),
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                    color: widget.focusedBorderColor != null
+                        ? widget.borderRadius
+                        : Colors.grey[200]),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(widget.borderRadius),
+                  topRight: Radius.circular(widget.borderRadius),
+                ),
               ),
             ),
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: widget.enabledBorderColor != null
-                    ? widget.borderRadius
-                    : Colors.grey[200],
-              ),
-              borderRadius: BorderRadius.all(
-                Radius.circular(widget.borderRadius),
-              ),
+            style: TextStyle(
+              fontSize: widget.fontSize,
             ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                  color: widget.focusedBorderColor != null
-                      ? widget.borderRadius
-                      : Colors.grey[200]),
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(widget.borderRadius),
-                topRight: Radius.circular(widget.borderRadius),
-              ),
-            ),
+            cursorColor: widget.cursorColor != null
+                ? widget.cursorColor
+                : Colors.grey[600],
           ),
-          style: TextStyle(
-            fontSize: widget.fontSize,
-          ),
-          cursorColor: widget.cursorColor != null
-              ? widget.cursorColor
-              : Colors.grey[600],
         ),
         if (!isItemClicked)
           Container(
@@ -227,6 +254,7 @@ class _AutoSearchInputState extends State<AutoSearchInput> {
                   height: widget.singleItemHeight,
                   padding: const EdgeInsets.all(8.0),
                   decoration: BoxDecoration(
+                    color: widget.bgColor,
                     border: Border.all(color: Colors.grey[300]),
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(
@@ -265,4 +293,65 @@ class _AutoSearchInputState extends State<AutoSearchInput> {
       ],
     );
   }
+
+  void onSearchTextChanges() {
+    switch (widget.searchMode) {
+      case SearchMode.STARTING_WITH:
+        setState(() {
+          results = widget.data
+              .where(
+                (element) => element
+                    .toLowerCase()
+                    .startsWith(_textEditingController.text.toLowerCase()),
+              )
+              .toList();
+        });
+        break;
+      case SearchMode.ENDING_WITH:
+        setState(() {
+          results = widget.data
+              .where(
+                (element) => element
+                    .toLowerCase()
+                    .endsWith(_textEditingController.text.toLowerCase()),
+              )
+              .toList();
+        });
+        break;
+      case SearchMode.CONTAINS:
+        setState(() {
+          results = widget.data
+              .where(
+                (element) => element
+                    .toLowerCase()
+                    .contains(_textEditingController.text.toLowerCase()),
+              )
+              .toList();
+        });
+        break;
+      case SearchMode.EXACT_MATCH:
+        setState(() {
+          results = widget.data
+              .where(
+                (element) =>
+                    element.toLowerCase() ==
+                    _textEditingController.text.toLowerCase(),
+              )
+              .toList();
+        });
+        break;
+    }
+    setState(() {
+      if (results.length > widget.maxElementsToDisplay) {
+        results = results.sublist(0, widget.maxElementsToDisplay);
+      }
+    });
+  }
+}
+
+enum SearchMode {
+  STARTING_WITH,
+  ENDING_WITH,
+  CONTAINS,
+  EXACT_MATCH,
 }

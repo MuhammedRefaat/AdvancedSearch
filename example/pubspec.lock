@@ -11,9 +11,9 @@ packages:
   auto_search:
     dependency: "direct main"
     description:
-      name: auto_search
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "/Users/muhammedrefaat/projects/auto_search"
+      relative: false
+    source: path
     version: "1.0.6"
   boolean_selector:
     dependency: transitive
