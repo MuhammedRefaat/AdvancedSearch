@@ -307,17 +307,6 @@ class _AutoSearchInputState extends State<AutoSearchInput> {
               .toList();
         });
         break;
-      case SearchMode.ENDING_WITH:
-        setState(() {
-          results = widget.data
-              .where(
-                (element) => element
-                    .toLowerCase()
-                    .endsWith(_textEditingController.text.toLowerCase()),
-              )
-              .toList();
-        });
-        break;
       case SearchMode.CONTAINS:
         setState(() {
           results = widget.data
@@ -351,7 +340,6 @@ class _AutoSearchInputState extends State<AutoSearchInput> {
 
 enum SearchMode {
   STARTING_WITH,
-  ENDING_WITH,
   CONTAINS,
   EXACT_MATCH,
 }
