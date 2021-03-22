@@ -256,6 +256,7 @@ class _AutoSearchInputState extends State<AutoSearchInput> {
         if (!isItemClicked)
           Container(
             height: widget.itemsShownAtStart * widget.singleItemHeight,
+            color: widget.bgColor,
             child: ListView.builder(
               scrollDirection: Axis.vertical,
               itemCount: results.length,
@@ -264,7 +265,6 @@ class _AutoSearchInputState extends State<AutoSearchInput> {
                   height: widget.singleItemHeight,
                   padding: const EdgeInsets.all(8.0),
                   decoration: BoxDecoration(
-                    color: widget.bgColor,
                     border: Border.all(color: Colors.grey[300]),
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(
