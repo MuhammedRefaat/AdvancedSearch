@@ -70,6 +70,8 @@ class AutoSearchInput extends StatefulWidget {
 
   final bool caseSensitive;
 
+  final minLettersForSearch;
+
   const AutoSearchInput({
     @required this.data,
     @required this.maxElementsToDisplay,
@@ -92,6 +94,7 @@ class AutoSearchInput extends StatefulWidget {
     this.bgColor = Colors.white,
     this.searchMode = SearchMode.CONTAINS,
     this.caseSensitive = false,
+    this.minLettersForSearch = 0,
   }) : assert(data != null, maxElementsToDisplay != null);
 
   @override
@@ -301,7 +304,14 @@ class _AutoSearchInputState extends State<AutoSearchInput> {
     );
   }
 
+  int previousSearchTextLength = 0;
+
   void onSearchTextChanges() {
+    if (_textEditingController.text.length < widget.minLettersForSearch &&
+        previousSearchTextLength == 0) {
+      return;
+    }
+    previousSearchTextLength = _textEditingController.text.length;
     String searchText = widget.caseSensitive
         ? _textEditingController.text
         : _textEditingController.text.toLowerCase();
