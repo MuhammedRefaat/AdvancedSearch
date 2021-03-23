@@ -70,7 +70,9 @@ class AutoSearchInput extends StatefulWidget {
 
   final bool caseSensitive;
 
-  final minLettersForSearch;
+  final int minLettersForSearch;
+
+  final Color borderColor;
 
   const AutoSearchInput({
     @required this.data,
@@ -84,7 +86,7 @@ class AutoSearchInput extends StatefulWidget {
     this.cursorColor,
     this.borderRadius = 10.0,
     this.fontSize = 20.0,
-    this.singleItemHeight = 40.0,
+    this.singleItemHeight = 45.0,
     this.itemsShownAtStart = 10,
     this.hintText = 'Enter a name',
     this.autoCorrect = true,
@@ -95,6 +97,7 @@ class AutoSearchInput extends StatefulWidget {
     this.searchMode = SearchMode.CONTAINS,
     this.caseSensitive = false,
     this.minLettersForSearch = 0,
+    this.borderColor = const Color(0xFFFAFAFA),
   }) : assert(data != null, maxElementsToDisplay != null);
 
   @override
@@ -147,49 +150,52 @@ class _AutoSearchInputState extends State<AutoSearchInput> {
     } catch (e) {
       print(e.toString());
     }
-    return RichText(
-      text: _textEditingController.text.length > 0
-          ? TextSpan(
-              children: [
-                if (_textEditingController.text.length > 0)
+    return Container(
+      alignment: Alignment.centerLeft,
+      child: RichText(
+        text: _textEditingController.text.length > 0
+            ? TextSpan(
+                children: [
+                  if (_textEditingController.text.length > 0)
+                    TextSpan(
+                      text: textBefore,
+                      style: TextStyle(
+                        fontSize: widget.fontSize,
+                        color: widget.unSelectedTextColor != null
+                            ? widget.unSelectedTextColor
+                            : Colors.grey[400],
+                      ),
+                    ),
                   TextSpan(
-                    text: textBefore,
+                    text: textSelected,
+                    style: TextStyle(
+                      fontSize: widget.fontSize,
+                      color: widget.selectedTextColor != null
+                          ? widget.selectedTextColor
+                          : Colors.black,
+                    ),
+                  ),
+                  TextSpan(
+                    text: textAfter,
                     style: TextStyle(
                       fontSize: widget.fontSize,
                       color: widget.unSelectedTextColor != null
                           ? widget.unSelectedTextColor
                           : Colors.grey[400],
                     ),
-                  ),
-                TextSpan(
-                  text: textSelected,
-                  style: TextStyle(
-                    fontSize: widget.fontSize,
-                    color: widget.selectedTextColor != null
-                        ? widget.selectedTextColor
-                        : Colors.black,
-                  ),
+                  )
+                ],
+              )
+            : TextSpan(
+                text: result,
+                style: TextStyle(
+                  fontSize: widget.fontSize,
+                  color: widget.unSelectedTextColor != null
+                      ? widget.unSelectedTextColor
+                      : Colors.grey[400],
                 ),
-                TextSpan(
-                  text: textAfter,
-                  style: TextStyle(
-                    fontSize: widget.fontSize,
-                    color: widget.unSelectedTextColor != null
-                        ? widget.unSelectedTextColor
-                        : Colors.grey[400],
-                  ),
-                )
-              ],
-            )
-          : TextSpan(
-              text: result,
-              style: TextStyle(
-                fontSize: widget.fontSize,
-                color: widget.unSelectedTextColor != null
-                    ? widget.unSelectedTextColor
-                    : Colors.grey[400],
               ),
-            ),
+      ),
     );
   }
 
@@ -265,7 +271,7 @@ class _AutoSearchInputState extends State<AutoSearchInput> {
                   height: widget.singleItemHeight,
                   padding: const EdgeInsets.all(8.0),
                   decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey[300]),
+                    border: Border.all(color: widget.borderColor),
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(
                         index == (results.length - 1)
