@@ -33,11 +33,14 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(20.0),
+      margin: const EdgeInsets.all(30.0),
       child: AutoSearchInput(
         data: names,
         maxElementsToDisplay: 10,
         onItemTap: (index) {},
+        onSearchClear: () {
+          print("Cleared Search");
+        },
       ),
     );
   }
