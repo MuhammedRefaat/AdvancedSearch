@@ -41,6 +41,12 @@ class HomePage extends StatelessWidget {
         onSearchClear: () {
           print("Cleared Search");
         },
+        onEditingComplete: (value){
+          print("Text: " + value);
+        },
+        onSubmitted: (value){
+          print("Submitted: " + value);
+        },
       ),
     );
   }
