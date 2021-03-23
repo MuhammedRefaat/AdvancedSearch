@@ -57,8 +57,10 @@ class AutoSearchInput extends StatefulWidget {
   final Function onSubmitted;
 
   ///Function to call when a certain item is clicked
-  /// Takes in a paramter of the item which was clicked
+  /// Takes in a parameter of the item which was clicked
   final OnTap onItemTap;
+
+  final Function onSearchClear;
 
   ///onEditingComplete function
   final Function onEditingComplete;
@@ -74,10 +76,13 @@ class AutoSearchInput extends StatefulWidget {
 
   final Color borderColor;
 
+  final bool clearSearchEnabled;
+
   const AutoSearchInput({
     @required this.data,
     @required this.maxElementsToDisplay,
     @required this.onItemTap,
+    @required this.onSearchClear,
     this.selectedTextColor,
     this.unSelectedTextColor,
     this.enabledBorderColor,
@@ -98,6 +103,7 @@ class AutoSearchInput extends StatefulWidget {
     this.caseSensitive = false,
     this.minLettersForSearch = 0,
     this.borderColor = const Color(0xFFFAFAFA),
+    this.clearSearchEnabled = true,
   }) : assert(data != null, maxElementsToDisplay != null);
 
   @override
@@ -204,65 +210,91 @@ class _AutoSearchInputState extends State<AutoSearchInput> {
     return Column(
       children: [
         Container(
-          margin: EdgeInsets.all(20),
-          child: TextField(
-            autocorrect: widget.autoCorrect,
-            enabled: widget.enabled,
-            onEditingComplete: widget.onEditingComplete,
-            onSubmitted: widget.onSubmitted,
-            onTap: () {
-              setState(() {
-                if (isItemClicked) {
-                  isItemClicked = !isItemClicked;
-                }
-              });
-            },
-            controller: _textEditingController,
-            decoration: InputDecoration(
-              hintText: widget.hintText,
-              contentPadding: const EdgeInsets.all(10.0),
-              disabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                    color: widget.disabledBorderColor != null
-                        ? widget.borderRadius
-                        : Colors.grey[200]),
-                borderRadius: BorderRadius.all(
-                  Radius.circular(widget.borderRadius),
+          child: Stack(
+            children: [
+              TextField(
+                autocorrect: widget.autoCorrect,
+                enabled: widget.enabled,
+                onEditingComplete: widget.onEditingComplete,
+                onSubmitted: widget.onSubmitted,
+                onTap: () {
+                  setState(() {
+                    if (isItemClicked) {
+                      isItemClicked = !isItemClicked;
+                    }
+                  });
+                },
+                controller: _textEditingController,
+                decoration: InputDecoration(
+                  hintText: widget.hintText,
+                  contentPadding: const EdgeInsets.all(10.0),
+                  disabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                        color: widget.disabledBorderColor != null
+                            ? widget.borderRadius
+                            : Colors.grey[200]),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(widget.borderRadius),
+                    ),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: widget.enabledBorderColor != null
+                          ? widget.borderRadius
+                          : Colors.grey[200],
+                    ),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(widget.borderRadius),
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                        color: widget.focusedBorderColor != null
+                            ? widget.borderRadius
+                            : Colors.grey[200]),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(widget.borderRadius),
+                      topRight: Radius.circular(widget.borderRadius),
+                    ),
+                  ),
                 ),
+                style: TextStyle(
+                  fontSize: widget.fontSize,
+                ),
+                cursorColor: widget.cursorColor != null
+                    ? widget.cursorColor
+                    : Colors.grey[600],
               ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: widget.enabledBorderColor != null
-                      ? widget.borderRadius
-                      : Colors.grey[200],
-                ),
-                borderRadius: BorderRadius.all(
-                  Radius.circular(widget.borderRadius),
-                ),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                    color: widget.focusedBorderColor != null
-                        ? widget.borderRadius
-                        : Colors.grey[200]),
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(widget.borderRadius),
-                  topRight: Radius.circular(widget.borderRadius),
-                ),
-              ),
-            ),
-            style: TextStyle(
-              fontSize: widget.fontSize,
-            ),
-            cursorColor: widget.cursorColor != null
-                ? widget.cursorColor
-                : Colors.grey[600],
+              widget.clearSearchEnabled
+                  ? InkWell(
+                      onTap: () {
+                        if (_textEditingController.text.length == 0) return;
+                        setState(() {
+                          _textEditingController.clear();
+                          widget.onSearchClear();
+                        });
+                      },
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Icon(
+                            Icons.highlight_remove,
+                            size: 27,
+                            color: _textEditingController.text.length == 0
+                                ? Colors.grey[300]
+                                : Colors.grey,
+                          ),
+                        ),
+                      ),
+                    )
+                  : Container()
+            ],
           ),
         ),
         if (!isItemClicked)
           Container(
             height: widget.itemsShownAtStart * widget.singleItemHeight,
-            color: widget.bgColor,
             child: ListView.builder(
               scrollDirection: Axis.vertical,
               itemCount: results.length,
@@ -271,6 +303,7 @@ class _AutoSearchInputState extends State<AutoSearchInput> {
                   height: widget.singleItemHeight,
                   padding: const EdgeInsets.all(8.0),
                   decoration: BoxDecoration(
+                    color: widget.bgColor,
                     border: Border.all(color: widget.borderColor),
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(
