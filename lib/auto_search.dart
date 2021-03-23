@@ -226,7 +226,7 @@ class _AdvancedAutoSearchState extends State<AdvancedAutoSearch> {
                   if (lastSubmittedText == "")
                     widget.onSearchClear();
                   else
-                    widget.onSubmitted(lastSubmittedText);
+                    widget.onSubmitted(lastSubmittedText, results);
                 },
                 onTap: () {
                   setState(() {
