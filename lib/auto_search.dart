@@ -94,7 +94,7 @@ class AutoSearchInput extends StatefulWidget {
     this.singleItemHeight = 45.0,
     this.itemsShownAtStart = 10,
     this.hintText = 'Enter a name',
-    this.autoCorrect = true,
+    this.autoCorrect = false,
     this.enabled = true,
     this.onSubmitted,
     this.onEditingComplete,
@@ -113,6 +113,7 @@ class AutoSearchInput extends StatefulWidget {
 class _AutoSearchInputState extends State<AutoSearchInput> {
   List<String> results = [];
   bool isItemClicked = false;
+  String lastSubmittedText = "";
 
   final TextEditingController _textEditingController = TextEditingController();
 
@@ -216,7 +217,16 @@ class _AutoSearchInputState extends State<AutoSearchInput> {
                 autocorrect: widget.autoCorrect,
                 enabled: widget.enabled,
                 onEditingComplete: widget.onEditingComplete,
-                onSubmitted: widget.onSubmitted,
+                onSubmitted: (value) {
+                  if (lastSubmittedText == value) {
+                    return; // Nothing new to Submit
+                  }
+                  lastSubmittedText = value;
+                  if (lastSubmittedText == "")
+                    widget.onSearchClear();
+                  else
+                    widget.onSubmitted(lastSubmittedText);
+                },
                 onTap: () {
                   setState(() {
                     if (isItemClicked) {
@@ -267,27 +277,27 @@ class _AutoSearchInputState extends State<AutoSearchInput> {
               ),
               widget.clearSearchEnabled
                   ? Align(
-                    alignment: Alignment.centerRight,
-                    child: InkWell(
-                      onTap: () {
-                        if (_textEditingController.text.length == 0) return;
-                        setState(() {
-                          _textEditingController.clear();
-                          widget.onSearchClear();
-                        });
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Icon(
-                          Icons.highlight_remove,
-                          size: 27,
-                          color: _textEditingController.text.length == 0
-                              ? Colors.grey[300]
-                              : Colors.grey,
+                      alignment: Alignment.centerRight,
+                      child: InkWell(
+                        onTap: () {
+                          if (_textEditingController.text.length == 0) return;
+                          setState(() {
+                            _textEditingController.clear();
+                            widget.onSearchClear();
+                          });
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Icon(
+                            Icons.highlight_remove,
+                            size: 27,
+                            color: _textEditingController.text.length == 0
+                                ? Colors.grey[300]
+                                : Colors.grey,
+                          ),
                         ),
                       ),
-                    ),
-                  )
+                    )
                   : Container()
             ],
           ),
