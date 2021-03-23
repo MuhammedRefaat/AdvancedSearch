@@ -266,7 +266,9 @@ class _AutoSearchInputState extends State<AutoSearchInput> {
                     : Colors.grey[600],
               ),
               widget.clearSearchEnabled
-                  ? InkWell(
+                  ? Align(
+                    alignment: Alignment.centerRight,
+                    child: InkWell(
                       onTap: () {
                         if (_textEditingController.text.length == 0) return;
                         setState(() {
@@ -274,20 +276,18 @@ class _AutoSearchInputState extends State<AutoSearchInput> {
                           widget.onSearchClear();
                         });
                       },
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Icon(
-                            Icons.highlight_remove,
-                            size: 27,
-                            color: _textEditingController.text.length == 0
-                                ? Colors.grey[300]
-                                : Colors.grey,
-                          ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Icon(
+                          Icons.highlight_remove,
+                          size: 27,
+                          color: _textEditingController.text.length == 0
+                              ? Colors.grey[300]
+                              : Colors.grey,
                         ),
                       ),
-                    )
+                    ),
+                  )
                   : Container()
             ],
           ),
