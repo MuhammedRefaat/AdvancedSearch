@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 typedef OnTap = void Function(int index);
 
 ///Class for adding AutoSearchInput to your project
-class AutoSearchInput extends StatefulWidget {
+class AdvancedAutoSearch extends StatefulWidget {
   ///List of data that can be searched through for the results
   final List<String> data;
 
@@ -78,7 +78,7 @@ class AutoSearchInput extends StatefulWidget {
 
   final bool clearSearchEnabled;
 
-  const AutoSearchInput({
+  const AdvancedAutoSearch({
     @required this.data,
     @required this.maxElementsToDisplay,
     @required this.onItemTap,
@@ -107,10 +107,10 @@ class AutoSearchInput extends StatefulWidget {
   }) : assert(data != null, maxElementsToDisplay != null);
 
   @override
-  _AutoSearchInputState createState() => _AutoSearchInputState();
+  _AdvancedAutoSearchState createState() => _AdvancedAutoSearchState();
 }
 
-class _AutoSearchInputState extends State<AutoSearchInput> {
+class _AdvancedAutoSearchState extends State<AdvancedAutoSearch> {
   List<String> results = [];
   bool isItemClicked = false;
   String lastSubmittedText = "";
