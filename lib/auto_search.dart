@@ -216,8 +216,9 @@ class _AdvancedAutoSearchState extends State<AdvancedAutoSearch> {
               TextField(
                 autocorrect: widget.autoCorrect,
                 enabled: widget.enabled,
-                onEditingComplete:
-                    widget.onEditingComplete(_textEditingController.text),
+                onEditingComplete: widget.onEditingComplete != null
+                    ? widget.onEditingComplete(_textEditingController.text)
+                    : () {},
                 onSubmitted: (value) {
                   if (lastSubmittedText == value) {
                     return; // Nothing new to Submit

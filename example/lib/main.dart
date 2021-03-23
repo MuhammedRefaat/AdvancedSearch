@@ -48,7 +48,7 @@ class HomePage extends StatelessWidget {
         onEditingComplete: (value){
           print("Text: " + value);
         },
-        onSubmitted: (value){
+        onSubmitted: (value, value2){
           print("Submitted: " + value);
         },
       ),
