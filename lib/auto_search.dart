@@ -216,7 +216,8 @@ class _AutoSearchInputState extends State<AutoSearchInput> {
               TextField(
                 autocorrect: widget.autoCorrect,
                 enabled: widget.enabled,
-                onEditingComplete: widget.onEditingComplete,
+                onEditingComplete:
+                    widget.onEditingComplete(_textEditingController.text),
                 onSubmitted: (value) {
                   if (lastSubmittedText == value) {
                     return; // Nothing new to Submit
