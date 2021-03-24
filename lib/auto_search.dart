@@ -253,7 +253,7 @@ class _AdvancedAutoSearchState extends State<AdvancedAutoSearch> {
                     borderSide: BorderSide(
                         color: widget.disabledBorderColor != null
                             ? widget.borderRadius
-                            : Colors.grey[200]),
+                            : Colors.grey[300]),
                     borderRadius: BorderRadius.all(
                       Radius.circular(widget.borderRadius),
                     ),
@@ -262,7 +262,7 @@ class _AdvancedAutoSearchState extends State<AdvancedAutoSearch> {
                     borderSide: BorderSide(
                       color: widget.enabledBorderColor != null
                           ? widget.borderRadius
-                          : Colors.grey[200],
+                          : Colors.grey[300],
                     ),
                     borderRadius: BorderRadius.all(
                       Radius.circular(widget.borderRadius),
@@ -272,7 +272,7 @@ class _AdvancedAutoSearchState extends State<AdvancedAutoSearch> {
                     borderSide: BorderSide(
                         color: widget.focusedBorderColor != null
                             ? widget.borderRadius
-                            : Colors.grey[200]),
+                            : Colors.grey[300]),
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(widget.borderRadius),
                       topRight: Radius.circular(widget.borderRadius),
@@ -321,40 +321,40 @@ class _AdvancedAutoSearchState extends State<AdvancedAutoSearch> {
               scrollDirection: Axis.vertical,
               itemCount: results.length,
               itemBuilder: (context, index) {
-                return Container(
-                  height: widget.singleItemHeight,
-                  padding: const EdgeInsets.all(8.0),
-                  decoration: BoxDecoration(
-                    color: widget.bgColor,
-                    border: Border.all(color: widget.borderColor),
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(
-                        index == (results.length - 1)
-                            ? widget.borderRadius
-                            : 0.0,
-                      ),
-                      bottomRight: Radius.circular(
-                        index == (results.length - 1)
-                            ? widget.borderRadius
-                            : 0.0,
+                return GestureDetector(
+                  onTap: () {
+                    String value = results[index];
+                    widget.onItemTap(widget.data.indexOf(value));
+                    _textEditingController.text = value;
+                    _textEditingController.selection =
+                        TextSelection.fromPosition(
+                          TextPosition(
+                            offset: value.length,
+                          ),
+                        );
+                    setState(() {
+                      isItemClicked = true;
+                    });
+                  },
+                  child: Container(
+                    height: widget.singleItemHeight,
+                    padding: const EdgeInsets.all(8.0),
+                    decoration: BoxDecoration(
+                      color: widget.bgColor,
+                      border: Border.all(color: widget.borderColor),
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(
+                          index == (results.length - 1)
+                              ? widget.borderRadius
+                              : 0.0,
+                        ),
+                        bottomRight: Radius.circular(
+                          index == (results.length - 1)
+                              ? widget.borderRadius
+                              : 0.0,
+                        ),
                       ),
                     ),
-                  ),
-                  child: GestureDetector(
-                    onTap: () {
-                      String value = results[index];
-                      widget.onItemTap(widget.data.indexOf(value));
-                      _textEditingController.text = value;
-                      _textEditingController.selection =
-                          TextSelection.fromPosition(
-                        TextPosition(
-                          offset: value.length,
-                        ),
-                      );
-                      setState(() {
-                        isItemClicked = true;
-                      });
-                    },
                     child: _getRichText(results[index]),
                   ),
                 );
