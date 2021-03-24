@@ -78,6 +78,8 @@ class AdvancedAutoSearch extends StatefulWidget {
 
   final bool clearSearchEnabled;
 
+  final bool showListOfResults;
+
   const AdvancedAutoSearch({
     @required this.data,
     @required this.maxElementsToDisplay,
@@ -104,6 +106,7 @@ class AdvancedAutoSearch extends StatefulWidget {
     this.minLettersForSearch = 0,
     this.borderColor = const Color(0xFFFAFAFA),
     this.clearSearchEnabled = true,
+    this.showListOfResults = false,
   }) : assert(data != null, maxElementsToDisplay != null);
 
   @override
@@ -304,7 +307,7 @@ class _AdvancedAutoSearchState extends State<AdvancedAutoSearch> {
             ],
           ),
         ),
-        if (!isItemClicked)
+        if (!isItemClicked && widget.showListOfResults)
           Container(
             height: widget.itemsShownAtStart * widget.singleItemHeight,
             child: ListView.builder(
