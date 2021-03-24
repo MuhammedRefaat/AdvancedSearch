@@ -237,9 +237,7 @@ class _AdvancedAutoSearchState extends State<AdvancedAutoSearch> {
                 },
                 onTap: () {
                   setState(() {
-                    if (isItemClicked) {
-                      isItemClicked = !isItemClicked;
-                    }
+                    isItemClicked = false;
                   });
                 },
                 controller: _textEditingController,
@@ -292,6 +290,7 @@ class _AdvancedAutoSearchState extends State<AdvancedAutoSearch> {
                           setState(() {
                             _textEditingController.clear();
                             widget.onSearchClear();
+                            isItemClicked = true;
                           });
                         },
                         child: Padding(
@@ -348,7 +347,7 @@ class _AdvancedAutoSearchState extends State<AdvancedAutoSearch> {
                         ),
                       );
                       setState(() {
-                        isItemClicked = !isItemClicked;
+                        isItemClicked = true;
                       });
                     },
                     child: _getRichText(results[index]),
