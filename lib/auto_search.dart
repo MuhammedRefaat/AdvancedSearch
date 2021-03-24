@@ -2,6 +2,8 @@ library auto_search;
 
 import 'package:flutter/material.dart';
 
+import 'package:keyboard_visibility/keyboard_visibility.dart';
+
 typedef OnTap = void Function(int index);
 
 ///Class for adding AutoSearchInput to your project
@@ -125,10 +127,29 @@ class _AdvancedAutoSearchState extends State<AdvancedAutoSearch> {
 
   final TextEditingController _textEditingController = TextEditingController();
 
+  KeyboardVisibilityNotification _keyboardVisibility =
+      new KeyboardVisibilityNotification();
+  bool _keyboardState;
+
   @override
   void initState() {
     super.initState();
     _textEditingController..addListener(onSearchTextChanges);
+
+    _keyboardState = _keyboardVisibility.isKeyboardVisible;
+
+    _keyboardVisibility.addNewListener(
+      onChange: (bool visible) {
+        setState(() {
+          _keyboardState = visible;
+          if (!_keyboardState) {
+            if (_textEditingController.text != null) {
+              sendSubmitResults(_textEditingController.text);
+            }
+          }
+        });
+      },
+    );
   }
 
   @override
@@ -216,152 +237,144 @@ class _AdvancedAutoSearchState extends State<AdvancedAutoSearch> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          child: Stack(
-            children: [
-              TextField(
-                autocorrect: widget.autoCorrect,
-                enabled: widget.enabled,
-                onEditingComplete: () {
-                  setEditingCompleteCallback();
-                },
-                onSubmitted: (value) {
-                  if (lastSubmittedText == value) {
-                    return; // Nothing new to Submit
-                  }
-                  lastSubmittedText = value;
-                  setState(() {
-                    isItemClicked = true;
-                  });
-                  if (lastSubmittedText == "")
-                    widget.onSearchClear();
-                  else
-                    widget.onSubmitted(lastSubmittedText, results);
-                },
-                onTap: () {
-                  setState(() {
-                    isItemClicked = false;
-                  });
-                },
-                controller: _textEditingController,
-                decoration: InputDecoration(
-                  hintText: widget.hintText,
-                  contentPadding: const EdgeInsets.all(10.0),
-                  disabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                        color: widget.disabledBorderColor != null
-                            ? widget.borderRadius
-                            : Colors.grey[300]),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(widget.borderRadius),
-                    ),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: widget.enabledBorderColor != null
-                          ? widget.borderRadius
-                          : Colors.grey[300],
-                    ),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(widget.borderRadius),
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                        color: widget.focusedBorderColor != null
-                            ? widget.borderRadius
-                            : Colors.grey[300]),
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(widget.borderRadius),
-                      topRight: Radius.circular(widget.borderRadius),
-                    ),
-                  ),
-                ),
-                style: TextStyle(
-                  fontSize: widget.fontSize,
-                ),
-                cursorColor: widget.cursorColor != null
-                    ? widget.cursorColor
-                    : Colors.grey[600],
-              ),
-              widget.clearSearchEnabled
-                  ? Align(
-                      alignment: Alignment.centerRight,
-                      child: InkWell(
-                        onTap: () {
-                          if (_textEditingController.text.length == 0) return;
-                          setState(() {
-                            _textEditingController.clear();
-                            widget.onSearchClear();
-                            isItemClicked = true;
-                          });
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Icon(
-                            Icons.highlight_remove,
-                            size: 27,
-                            color: _textEditingController.text.length == 0
-                                ? Colors.grey[300]
-                                : Colors.grey,
-                          ),
-                        ),
-                      ),
-                    )
-                  : Container()
-            ],
-          ),
-        ),
-        if (!isItemClicked && widget.showListOfResults)
+    return SingleChildScrollView(
+      child: Column(
+        children: [
           Container(
-            height: widget.itemsShownAtStart * widget.singleItemHeight,
-            child: ListView.builder(
-              scrollDirection: Axis.vertical,
-              itemCount: results.length,
-              itemBuilder: (context, index) {
-                return GestureDetector(
+            child: Stack(
+              children: [
+                TextField(
+                  autocorrect: widget.autoCorrect,
+                  enabled: widget.enabled,
+                  onEditingComplete: () {
+                    setEditingCompleteCallback();
+                  },
+                  onSubmitted: (value) {
+                    sendSubmitResults(value);
+                  },
                   onTap: () {
-                    String value = results[index];
-                    widget.onItemTap(widget.data.indexOf(value));
-                    _textEditingController.text = value;
-                    _textEditingController.selection =
-                        TextSelection.fromPosition(
-                          TextPosition(
-                            offset: value.length,
-                          ),
-                        );
                     setState(() {
-                      isItemClicked = true;
+                      isItemClicked = false;
                     });
                   },
-                  child: Container(
-                    height: widget.singleItemHeight,
-                    padding: const EdgeInsets.all(8.0),
-                    decoration: BoxDecoration(
-                      color: widget.bgColor,
-                      border: Border.all(color: widget.borderColor),
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(
-                          index == (results.length - 1)
+                  controller: _textEditingController,
+                  decoration: InputDecoration(
+                    hintText: widget.hintText,
+                    contentPadding: const EdgeInsets.all(10.0),
+                    disabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: widget.disabledBorderColor != null
                               ? widget.borderRadius
-                              : 0.0,
-                        ),
-                        bottomRight: Radius.circular(
-                          index == (results.length - 1)
-                              ? widget.borderRadius
-                              : 0.0,
-                        ),
+                              : Colors.grey[300]),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(widget.borderRadius),
                       ),
                     ),
-                    child: _getRichText(results[index]),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: widget.enabledBorderColor != null
+                            ? widget.borderRadius
+                            : Colors.grey[300],
+                      ),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(widget.borderRadius),
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: widget.focusedBorderColor != null
+                              ? widget.borderRadius
+                              : Colors.grey[300]),
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(widget.borderRadius),
+                        topRight: Radius.circular(widget.borderRadius),
+                      ),
+                    ),
                   ),
-                );
-              },
+                  style: TextStyle(
+                    fontSize: widget.fontSize,
+                  ),
+                  cursorColor: widget.cursorColor != null
+                      ? widget.cursorColor
+                      : Colors.grey[600],
+                ),
+                widget.clearSearchEnabled
+                    ? Align(
+                        alignment: Alignment.centerRight,
+                        child: InkWell(
+                          onTap: () {
+                            if (_textEditingController.text.length == 0) return;
+                            setState(() {
+                              _textEditingController.clear();
+                              widget.onSearchClear();
+                              isItemClicked = true;
+                            });
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Icon(
+                              Icons.highlight_remove,
+                              size: 27,
+                              color: _textEditingController.text.length == 0
+                                  ? Colors.grey[300]
+                                  : Colors.grey,
+                            ),
+                          ),
+                        ),
+                      )
+                    : Container()
+              ],
             ),
           ),
-      ],
+          if (!isItemClicked && widget.showListOfResults)
+            Container(
+              height: widget.itemsShownAtStart * widget.singleItemHeight,
+              child: ListView.builder(
+                scrollDirection: Axis.vertical,
+                itemCount: results.length,
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    onTap: () {
+                      String value = results[index];
+                      widget.onItemTap(widget.data.indexOf(value));
+                      _textEditingController.text = value;
+                      _textEditingController.selection =
+                          TextSelection.fromPosition(
+                        TextPosition(
+                          offset: value.length,
+                        ),
+                      );
+                      setState(() {
+                        isItemClicked = true;
+                      });
+                    },
+                    child: Container(
+                      height: widget.singleItemHeight,
+                      padding: const EdgeInsets.all(8.0),
+                      decoration: BoxDecoration(
+                        color: widget.bgColor,
+                        border: Border.all(color: widget.borderColor),
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(
+                            index == (results.length - 1)
+                                ? widget.borderRadius
+                                : 0.0,
+                          ),
+                          bottomRight: Radius.circular(
+                            index == (results.length - 1)
+                                ? widget.borderRadius
+                                : 0.0,
+                          ),
+                        ),
+                      ),
+                      child: _getRichText(results[index]),
+                    ),
+                  );
+                },
+              ),
+            ),
+        ],
+      ),
     );
   }
 
@@ -433,6 +446,24 @@ class _AdvancedAutoSearchState extends State<AdvancedAutoSearch> {
         widget.onEditingComplete(_textEditingController.text, results);
       }
       _previouslyResultedText = _textEditingController.text;
+    }
+  }
+
+  void sendSubmitResults(value) {
+    try {
+      if (lastSubmittedText == value) {
+        return; // Nothing new to Submit
+      }
+      lastSubmittedText = value;
+      setState(() {
+        isItemClicked = true;
+      });
+      if (lastSubmittedText == "")
+        widget.onSearchClear();
+      else
+        widget.onSubmitted(lastSubmittedText, results);
+    } catch (e) {
+      print(e.toString());
     }
   }
 }
