@@ -65,6 +65,9 @@ class AdvancedAutoSearch extends StatefulWidget {
   ///onEditingComplete function
   final Function onEditingComplete;
 
+  /// Function to be called on editing the text field
+  final Function textEditCallback;
+
   ///List Background Color
   final Color bgColor;
 
@@ -100,6 +103,7 @@ class AdvancedAutoSearch extends StatefulWidget {
     this.enabled = true,
     this.onSubmitted,
     this.onEditingComplete,
+    this.textEditCallback,
     this.bgColor = Colors.white,
     this.searchMode = SearchMode.CONTAINS,
     this.caseSensitive = false,
@@ -221,20 +225,7 @@ class _AdvancedAutoSearchState extends State<AdvancedAutoSearch> {
                 autocorrect: widget.autoCorrect,
                 enabled: widget.enabled,
                 onEditingComplete: () {
-                  if (widget.onEditingComplete != null &&
-                      (_textEditingController.text != "" ||
-                          _previouslyResultedText != "") &&
-                      _textEditingController.text != _previouslyResultedText) {
-                    if (_textEditingController.text.length <
-                        widget.minLettersForSearch) {
-                      widget.onEditingComplete(
-                          _textEditingController.text, widget.data);
-                    } else {
-                      widget.onEditingComplete(
-                          _textEditingController.text, results);
-                    }
-                    _previouslyResultedText = _textEditingController.text;
-                  }
+                  setEditingCompleteCallback();
                 },
                 onSubmitted: (value) {
                   if (lastSubmittedText == value) {
@@ -379,51 +370,70 @@ class _AdvancedAutoSearchState extends State<AdvancedAutoSearch> {
       setState(() {
         results = [];
       });
-      return;
-    }
-    String searchText = widget.caseSensitive
-        ? _textEditingController.text
-        : _textEditingController.text.toLowerCase();
-    switch (widget.searchMode) {
-      case SearchMode.STARTING_WITH:
-        setState(() {
-          results = widget.data
-              .where(
-                (element) =>
-                    (widget.caseSensitive ? element : element.toLowerCase())
-                        .startsWith(searchText),
-              )
-              .toList();
-        });
-        break;
-      case SearchMode.CONTAINS:
-        setState(() {
-          results = widget.data
-              .where(
-                (element) =>
-                    (widget.caseSensitive ? element : element.toLowerCase())
-                        .contains(searchText),
-              )
-              .toList();
-        });
-        break;
-      case SearchMode.EXACT_MATCH:
-        setState(() {
-          results = widget.data
-              .where(
-                (element) =>
-                    (widget.caseSensitive ? element : element.toLowerCase()) ==
-                    searchText,
-              )
-              .toList();
-        });
-        break;
-    }
-    setState(() {
-      if (results.length > widget.maxElementsToDisplay) {
-        results = results.sublist(0, widget.maxElementsToDisplay);
+    } else {
+      String searchText = widget.caseSensitive
+          ? _textEditingController.text
+          : _textEditingController.text.toLowerCase();
+      switch (widget.searchMode) {
+        case SearchMode.STARTING_WITH:
+          setState(() {
+            results = widget.data
+                .where(
+                  (element) =>
+                      (widget.caseSensitive ? element : element.toLowerCase())
+                          .startsWith(searchText),
+                )
+                .toList();
+          });
+          break;
+        case SearchMode.CONTAINS:
+          setState(() {
+            results = widget.data
+                .where(
+                  (element) =>
+                      (widget.caseSensitive ? element : element.toLowerCase())
+                          .contains(searchText),
+                )
+                .toList();
+          });
+          break;
+        case SearchMode.EXACT_MATCH:
+          setState(() {
+            results = widget.data
+                .where(
+                  (element) =>
+                      (widget.caseSensitive
+                          ? element
+                          : element.toLowerCase()) ==
+                      searchText,
+                )
+                .toList();
+          });
+          break;
       }
-    });
+      setState(() {
+        if (results.length > widget.maxElementsToDisplay) {
+          results = results.sublist(0, widget.maxElementsToDisplay);
+        }
+      });
+    }
+    // now send the latest updates
+    if (widget.textEditCallback != null) {
+      widget.textEditCallback(_textEditingController.text, results);
+    }
+  }
+
+  void setEditingCompleteCallback() {
+    if (widget.onEditingComplete != null &&
+        (_textEditingController.text != "" || _previouslyResultedText != "") &&
+        _textEditingController.text != _previouslyResultedText) {
+      if (_textEditingController.text.length < widget.minLettersForSearch) {
+        widget.onEditingComplete(_textEditingController.text, widget.data);
+      } else {
+        widget.onEditingComplete(_textEditingController.text, results);
+      }
+      _previouslyResultedText = _textEditingController.text;
+    }
   }
 }
 
