@@ -66,7 +66,7 @@ class AdvancedAutoSearch extends StatefulWidget {
   final Function onEditingComplete;
 
   /// Function to be called on editing the text field
-  final Function textEditCallback;
+  final Function onEditingProgress;
 
   ///List Background Color
   final Color bgColor;
@@ -103,7 +103,7 @@ class AdvancedAutoSearch extends StatefulWidget {
     this.enabled = true,
     this.onSubmitted,
     this.onEditingComplete,
-    this.textEditCallback,
+    this.onEditingProgress,
     this.bgColor = Colors.white,
     this.searchMode = SearchMode.CONTAINS,
     this.caseSensitive = false,
@@ -418,8 +418,8 @@ class _AdvancedAutoSearchState extends State<AdvancedAutoSearch> {
       });
     }
     // now send the latest updates
-    if (widget.textEditCallback != null) {
-      widget.textEditCallback(_textEditingController.text, results);
+    if (widget.onEditingProgress != null) {
+      widget.onEditingProgress(_textEditingController.text, results);
     }
   }
 

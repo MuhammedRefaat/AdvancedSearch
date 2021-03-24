@@ -45,11 +45,15 @@ class HomePage extends StatelessWidget {
         onSearchClear: () {
           print("Cleared Search");
         },
-        onEditingComplete: (value){
+        onEditingComplete: (value) {
           print("Text: " + value);
         },
-        onSubmitted: (value, value2){
+        onSubmitted: (value, value2) {
           print("Submitted: " + value);
+        },
+        onEditingProgress: (value, value2) {
+          print("TextEdited: " + value);
+          print("LENGTH: " + value2.length.toString());
         },
       ),
     );
