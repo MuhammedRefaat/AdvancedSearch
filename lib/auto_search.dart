@@ -106,7 +106,7 @@ class AdvancedAutoSearch extends StatefulWidget {
     this.minLettersForSearch = 0,
     this.borderColor = const Color(0xFFFAFAFA),
     this.clearSearchEnabled = true,
-    this.showListOfResults = false,
+    this.showListOfResults = true,
   }) : assert(data != null, maxElementsToDisplay != null);
 
   @override
@@ -358,14 +358,13 @@ class _AdvancedAutoSearchState extends State<AdvancedAutoSearch> {
     );
   }
 
-  int previousSearchTextLength = 0;
-
   void onSearchTextChanges() {
-    if (_textEditingController.text.length < widget.minLettersForSearch &&
-        previousSearchTextLength == 0) {
+    if (_textEditingController.text.length < widget.minLettersForSearch) {
+      setState(() {
+        results = [];
+      });
       return;
     }
-    previousSearchTextLength = _textEditingController.text.length;
     String searchText = widget.caseSensitive
         ? _textEditingController.text
         : _textEditingController.text.toLowerCase();
