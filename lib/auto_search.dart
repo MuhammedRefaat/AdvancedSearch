@@ -225,8 +225,14 @@ class _AdvancedAutoSearchState extends State<AdvancedAutoSearch> {
                       (_textEditingController.text != "" ||
                           _previouslyResultedText != "") &&
                       _textEditingController.text != _previouslyResultedText) {
-                    widget.onEditingComplete(
-                        _textEditingController.text, results);
+                    if (_textEditingController.text.length <
+                        widget.minLettersForSearch) {
+                      widget.onEditingComplete(
+                          _textEditingController.text, widget.data);
+                    } else {
+                      widget.onEditingComplete(
+                          _textEditingController.text, results);
+                    }
                     _previouslyResultedText = _textEditingController.text;
                   }
                 },
