@@ -64,9 +64,6 @@ class AdvancedAutoSearch extends StatefulWidget {
 
   final Function onSearchClear;
 
-  ///onEditingComplete function
-  final Function onEditingComplete;
-
   /// Function to be called on editing the text field
   final Function onEditingProgress;
 
@@ -104,7 +101,6 @@ class AdvancedAutoSearch extends StatefulWidget {
     this.autoCorrect = false,
     this.enabled = true,
     this.onSubmitted,
-    this.onEditingComplete,
     this.onEditingProgress,
     this.bgColor = Colors.white,
     this.searchMode = SearchMode.CONTAINS,
@@ -247,10 +243,10 @@ class _AdvancedAutoSearchState extends State<AdvancedAutoSearch> {
                   autocorrect: widget.autoCorrect,
                   enabled: widget.enabled,
                   onEditingComplete: () {
-                    setEditingCompleteCallback();
+                    FocusScope.of(context).unfocus();
                   },
                   onSubmitted: (value) {
-                    sendSubmitResults(value);
+                    FocusScope.of(context).unfocus();
                   },
                   onTap: () {
                     setState(() {
@@ -433,19 +429,6 @@ class _AdvancedAutoSearchState extends State<AdvancedAutoSearch> {
     // now send the latest updates
     if (widget.onEditingProgress != null) {
       widget.onEditingProgress(_textEditingController.text, results);
-    }
-  }
-
-  void setEditingCompleteCallback() {
-    if (widget.onEditingComplete != null &&
-        (_textEditingController.text != "" || _previouslyResultedText != "") &&
-        _textEditingController.text != _previouslyResultedText) {
-      if (_textEditingController.text.length < widget.minLettersForSearch) {
-        widget.onEditingComplete(_textEditingController.text, widget.data);
-      } else {
-        widget.onEditingComplete(_textEditingController.text, results);
-      }
-      _previouslyResultedText = _textEditingController.text;
     }
   }
 
