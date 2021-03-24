@@ -92,7 +92,7 @@ class AdvancedAutoSearch extends StatefulWidget {
     this.focusedBorderColor,
     this.cursorColor,
     this.borderRadius = 10.0,
-    this.fontSize = 20.0,
+    this.fontSize = 14.0,
     this.singleItemHeight = 45.0,
     this.itemsShownAtStart = 10,
     this.hintText = 'Enter a name',
