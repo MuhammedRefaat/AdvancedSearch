@@ -117,6 +117,7 @@ class _AdvancedAutoSearchState extends State<AdvancedAutoSearch> {
   List<String> results = [];
   bool isItemClicked = false;
   String lastSubmittedText = "";
+  String _previouslyResultedText = "";
 
   final TextEditingController _textEditingController = TextEditingController();
 
@@ -219,10 +220,16 @@ class _AdvancedAutoSearchState extends State<AdvancedAutoSearch> {
               TextField(
                 autocorrect: widget.autoCorrect,
                 enabled: widget.enabled,
-                onEditingComplete: widget.onEditingComplete != null
-                    ? widget.onEditingComplete(
-                        _textEditingController.text, results)
-                    : () {},
+                onEditingComplete: () {
+                  if (widget.onEditingComplete != null &&
+                      (_textEditingController.text != "" ||
+                          _previouslyResultedText != "") &&
+                      _textEditingController.text != _previouslyResultedText) {
+                    widget.onEditingComplete(
+                        _textEditingController.text, results);
+                    _previouslyResultedText = _textEditingController.text;
+                  }
+                },
                 onSubmitted: (value) {
                   if (lastSubmittedText == value) {
                     return; // Nothing new to Submit
