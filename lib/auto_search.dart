@@ -1,8 +1,7 @@
 library auto_search;
 
 import 'package:flutter/material.dart';
-
-import 'package:keyboard_visibility/keyboard_visibility.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 typedef OnTap = void Function(int index);
 
@@ -122,30 +121,25 @@ class _AdvancedAutoSearchState extends State<AdvancedAutoSearch> {
 
   final TextEditingController _textEditingController = TextEditingController();
 
-  KeyboardVisibilityNotification _keyboardVisibility =
-      new KeyboardVisibilityNotification();
-  bool _keyboardState;
-
   @override
   void initState() {
     super.initState();
     _textEditingController..addListener(onSearchTextChanges);
 
-    _keyboardState = _keyboardVisibility.isKeyboardVisible;
+    var keyboardVisibilityController = KeyboardVisibilityController();
 
-    _keyboardVisibility.addNewListener(
-      onChange: (bool visible) {
-        setState(() {
-          _keyboardState = visible;
-          if (!_keyboardState) {
-            if (_textEditingController.text != null) {
-              sendSubmitResults(_textEditingController.text);
-            }
-            FocusScope.of(context).unfocus();
+    // Subscribe
+    keyboardVisibilityController.onChange.listen((bool visible) {
+      setState(() {
+        if (!visible) {
+          if (_textEditingController.text != null) {
+            sendSubmitResults(_textEditingController.text);
           }
-        });
-      },
-    );
+          FocusScope.of(context).unfocus();
+        }
+      });
+    });
+
   }
 
   @override
