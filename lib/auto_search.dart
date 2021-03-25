@@ -234,97 +234,96 @@ class _AdvancedAutoSearchState extends State<AdvancedAutoSearch> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
+      physics: NeverScrollableScrollPhysics(),
       child: Column(
         children: [
-          Container(
-            child: Stack(
-              children: [
-                TextField(
-                  autocorrect: widget.autoCorrect,
-                  enabled: widget.enabled,
-                  onEditingComplete: () {
-                    FocusScope.of(context).unfocus();
-                  },
-                  onSubmitted: (value) {
-                    FocusScope.of(context).unfocus();
-                  },
-                  onTap: () {
-                    setState(() {
-                      isItemClicked = false;
-                    });
-                  },
-                  controller: _textEditingController,
-                  decoration: InputDecoration(
-                    hintText: widget.hintText,
-                    contentPadding: const EdgeInsets.all(10.0),
-                    disabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                          color: widget.disabledBorderColor != null
-                              ? widget.borderRadius
-                              : Colors.grey[300]),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(widget.borderRadius),
-                      ),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: widget.enabledBorderColor != null
+          Stack(
+            children: [
+              TextField(
+                autocorrect: widget.autoCorrect,
+                enabled: widget.enabled,
+                onEditingComplete: () {
+                  FocusScope.of(context).unfocus();
+                },
+                onSubmitted: (value) {
+                  FocusScope.of(context).unfocus();
+                },
+                onTap: () {
+                  setState(() {
+                    isItemClicked = false;
+                  });
+                },
+                controller: _textEditingController,
+                decoration: InputDecoration(
+                  hintText: widget.hintText,
+                  contentPadding: const EdgeInsets.all(10.0),
+                  disabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                        color: widget.disabledBorderColor != null
                             ? widget.borderRadius
-                            : Colors.grey[300],
-                      ),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(widget.borderRadius),
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                          color: widget.focusedBorderColor != null
-                              ? widget.borderRadius
-                              : Colors.grey[300]),
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(widget.borderRadius),
-                        topRight: Radius.circular(widget.borderRadius),
-                      ),
+                            : Colors.grey[300]),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(widget.borderRadius),
                     ),
                   ),
-                  style: TextStyle(
-                    fontSize: widget.fontSize,
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: widget.enabledBorderColor != null
+                          ? widget.borderRadius
+                          : Colors.grey[300],
+                    ),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(widget.borderRadius),
+                    ),
                   ),
-                  cursorColor: widget.cursorColor != null
-                      ? widget.cursorColor
-                      : Colors.grey[600],
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                        color: widget.focusedBorderColor != null
+                            ? widget.borderRadius
+                            : Colors.grey[300]),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(widget.borderRadius),
+                      topRight: Radius.circular(widget.borderRadius),
+                    ),
+                  ),
                 ),
-                widget.clearSearchEnabled
-                    ? Align(
-                        alignment: Alignment.centerRight,
-                        child: InkWell(
-                          onTap: () {
-                            if (_textEditingController.text.length == 0) return;
-                            setState(() {
-                              _textEditingController.clear();
-                              widget.onSearchClear();
-                              isItemClicked = true;
-                            });
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Icon(
-                              Icons.highlight_remove,
-                              size: 27,
-                              color: _textEditingController.text.length == 0
-                                  ? Colors.grey[300]
-                                  : Colors.grey,
-                            ),
+                style: TextStyle(
+                  fontSize: widget.fontSize,
+                ),
+                cursorColor: widget.cursorColor != null
+                    ? widget.cursorColor
+                    : Colors.grey[600],
+              ),
+              widget.clearSearchEnabled
+                  ? Align(
+                      alignment: Alignment.centerRight,
+                      child: InkWell(
+                        onTap: () {
+                          if (_textEditingController.text.length == 0) return;
+                          setState(() {
+                            _textEditingController.clear();
+                            widget.onSearchClear();
+                            isItemClicked = true;
+                          });
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Icon(
+                            Icons.highlight_remove,
+                            size: 27,
+                            color: _textEditingController.text.length == 0
+                                ? Colors.grey[300]
+                                : Colors.grey,
                           ),
                         ),
-                      )
-                    : Container()
-              ],
-            ),
+                      ),
+                    )
+                  : Container()
+            ],
           ),
           if (!isItemClicked && widget.showListOfResults)
             Container(
-              height: widget.itemsShownAtStart * widget.singleItemHeight,
+              height: results.length * widget.singleItemHeight,
               child: ListView.builder(
                 scrollDirection: Axis.vertical,
                 itemCount: results.length,
