@@ -293,7 +293,8 @@ class _AdvancedAutoSearchState extends State<AdvancedAutoSearch> {
                     ? widget.cursorColor
                     : Colors.grey[600],
               ),
-              widget.clearSearchEnabled
+              widget.clearSearchEnabled &&
+                      _textEditingController.text.length > 0
                   ? Align(
                       alignment: Alignment.centerRight,
                       child: InkWell(
