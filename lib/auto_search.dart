@@ -141,6 +141,7 @@ class _AdvancedAutoSearchState extends State<AdvancedAutoSearch> {
             if (_textEditingController.text != null) {
               sendSubmitResults(_textEditingController.text);
             }
+            FocusScope.of(context).unfocus();
           }
         });
       },
