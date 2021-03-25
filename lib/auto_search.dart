@@ -49,9 +49,6 @@ class AdvancedAutoSearch extends StatefulWidget {
   ///Hint text to show inside the TextField
   final String hintText;
 
-  ///InitialText to display in the textField
-  final String initialText;
-
   ///Boolean to set autoCorrect
   final bool autoCorrect;
 
@@ -101,7 +98,6 @@ class AdvancedAutoSearch extends StatefulWidget {
     this.singleItemHeight = 45.0,
     this.itemsShownAtStart = 10,
     this.hintText = 'Enter a name',
-    this.initialText = '',
     this.autoCorrect = false,
     this.enabled = true,
     this.onSubmitted,
@@ -123,7 +119,6 @@ class _AdvancedAutoSearchState extends State<AdvancedAutoSearch> {
   List<String> results = [];
   bool isItemClicked = false;
   String lastSubmittedText = "";
-  String _previouslyResultedText = "";
 
   final TextEditingController _textEditingController = TextEditingController();
 
@@ -237,9 +232,6 @@ class _AdvancedAutoSearchState extends State<AdvancedAutoSearch> {
 
   @override
   Widget build(BuildContext context) {
-    if(widget.initialText != null && widget.initialText != ""){
-      _textEditingController.text = widget.initialText;
-    }
     return SingleChildScrollView(
       physics: NeverScrollableScrollPhysics(),
       child: Column(
