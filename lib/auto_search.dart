@@ -139,7 +139,6 @@ class _AdvancedAutoSearchState extends State<AdvancedAutoSearch> {
         }
       });
     });
-
   }
 
   @override
@@ -227,6 +226,7 @@ class _AdvancedAutoSearchState extends State<AdvancedAutoSearch> {
 
   @override
   Widget build(BuildContext context) {
+    bool isLtr = Directionality.of(context) == TextDirection.ltr;
     return SingleChildScrollView(
       physics: NeverScrollableScrollPhysics(),
       child: Column(
@@ -291,7 +291,8 @@ class _AdvancedAutoSearchState extends State<AdvancedAutoSearch> {
               widget.clearSearchEnabled &&
                       _textEditingController.text.length > 0
                   ? Align(
-                      alignment: Alignment.centerRight,
+                      alignment:
+                          isLtr ? Alignment.centerRight : Alignment.centerLeft,
                       child: InkWell(
                         onTap: () {
                           if (_textEditingController.text.length == 0) return;
