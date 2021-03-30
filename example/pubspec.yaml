@@ -1,5 +1,5 @@
-name: AutoSearchInputExample
-description: An example to show how the AutoSearchInput works.
+name: AdvancedSearchExample
+description: An example to show how the package works.
 
 version: 1.0.0+1
 
@@ -11,8 +11,8 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^0.1.3
-  auto_search:
-    path: /Users/muhammedrefaat/projects/auto_search
+  advanced_search:
+    path: /Users/muhammedrefaat/projects/advanced_search
 
 dev_dependencies:
   flutter_test:

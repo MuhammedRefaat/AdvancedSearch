@@ -1,4 +1,4 @@
-library auto_search;
+library advanced_search;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
@@ -6,7 +6,7 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 typedef OnTap = void Function(int index);
 
 ///Class for adding AutoSearchInput to your project
-class AdvancedAutoSearch extends StatefulWidget {
+class AdvancedSearch extends StatefulWidget {
   ///List of data that can be searched through for the results
   final List<String> data;
 
@@ -81,7 +81,7 @@ class AdvancedAutoSearch extends StatefulWidget {
 
   final bool showListOfResults;
 
-  const AdvancedAutoSearch({
+  const AdvancedSearch({
     @required this.data,
     @required this.maxElementsToDisplay,
     @required this.onItemTap,
@@ -111,10 +111,10 @@ class AdvancedAutoSearch extends StatefulWidget {
   }) : assert(data != null, maxElementsToDisplay != null);
 
   @override
-  _AdvancedAutoSearchState createState() => _AdvancedAutoSearchState();
+  _AdvancedSearchState createState() => _AdvancedSearchState();
 }
 
-class _AdvancedAutoSearchState extends State<AdvancedAutoSearch> {
+class _AdvancedSearchState extends State<AdvancedSearch> {
   List<String> results = [];
   bool isItemClicked = false;
   String lastSubmittedText = "";

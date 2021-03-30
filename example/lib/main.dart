@@ -1,4 +1,4 @@
-import 'package:auto_search/auto_search.dart';
+import 'package:advanced_search/advanced_search.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -37,8 +37,8 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(30.0),
-      child: AdvancedAutoSearch(
+      margin: const EdgeInsets.only(top: 50.0, left: 30, right: 30),
+      child: AdvancedSearch(
         data: names,
         maxElementsToDisplay: 10,
         onItemTap: (index) {},

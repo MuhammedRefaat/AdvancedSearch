@@ -1,8 +1,8 @@
-name: auto_search
-description: A simple Auto Search Text Field to spice up your projects. This package would help incorporate such a feature with ease.
+name: advanced_search
+description: Text Field with Advanced Search features that gives you search results from a predefined set as per your search settings
 version: 1.0.6
-homepage: https://github.com/SudhanshuBhagwat
-repository: https://github.com/SudhanshuBhagwat/auto_search
+homepage: https://github.com/MuhammedRefaat
+repository: https://github.com/MuhammedRefaat/AdvancedSearch
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
