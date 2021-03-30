@@ -27,7 +27,7 @@ class AdvancedSearch extends StatefulWidget {
   ///Color of the border when the TextField is disabled
   final Color disabledBorderColor;
 
-  ///Color of the border when the TextField is being interated with
+  ///Color of the border when the TextField is being integrated with
   final Color focusedBorderColor;
 
   ///Color of the cursor
@@ -254,7 +254,7 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
                   disabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(
                         color: widget.disabledBorderColor != null
-                            ? widget.borderRadius
+                            ? widget.disabledBorderColor
                             : Colors.grey[300]),
                     borderRadius: BorderRadius.all(
                       Radius.circular(widget.borderRadius),
@@ -263,7 +263,7 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(
                       color: widget.enabledBorderColor != null
-                          ? widget.borderRadius
+                          ? widget.enabledBorderColor
                           : Colors.grey[300],
                     ),
                     borderRadius: BorderRadius.all(
@@ -273,7 +273,7 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(
                         color: widget.focusedBorderColor != null
-                            ? widget.borderRadius
+                            ? widget.focusedBorderColor
                             : Colors.grey[300]),
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(widget.borderRadius),
