@@ -99,4 +99,4 @@ AdvancedSearch(
 ```
 
 
-To give the credit to whom deserve it, I got inspired to do this package by the [auto_search](https://pub.dev/packages/auto_search) package.
+### To give the credit to whom deserve it, I got inspired to do this package by the [auto_search](https://pub.dev/packages/auto_search) package.
