@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 typedef OnTap = void Function(int index);
+typedef SubmitResults = void Function(
+    String searchText, List<String> searhcResults);
 
 ///Class for adding AutoSearchInput to your project
 class AdvancedSearch extends StatefulWidget {
@@ -55,16 +57,17 @@ class AdvancedSearch extends StatefulWidget {
   final bool enabled;
 
   ///onSubmitted function
-  final Function onSubmitted;
+  final SubmitResults onSubmitted;
 
   ///Function to call when a certain item is clicked
   /// Takes in a parameter of the item which was clicked
   final OnTap onItemTap;
 
+  /// Callback to be called when the user clears his search
   final Function onSearchClear;
 
   /// Function to be called on editing the text field
-  final Function onEditingProgress;
+  final SubmitResults onEditingProgress;
 
   ///List Background Color
   final Color bgColor;
