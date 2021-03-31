@@ -5,7 +5,7 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 typedef OnTap = void Function(int index);
 typedef SubmitResults = void Function(
-    String searchText, List<String> searhcResults);
+    String searchText, List<String> searchResults);
 
 ///Class for adding AutoSearchInput to your project
 class AdvancedSearch extends StatefulWidget {
