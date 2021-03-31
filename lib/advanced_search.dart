@@ -3,7 +3,7 @@ library advanced_search;
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
-typedef OnTap = void Function(int index);
+typedef OnTap = void Function(int index, String value);
 typedef SubmitResults = void Function(
     String searchText, List<String> searchResults);
 
@@ -330,7 +330,7 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
                   return GestureDetector(
                     onTap: () {
                       String value = results[index];
-                      widget.onItemTap(widget.data.indexOf(value));
+                      widget.onItemTap(widget.data.indexOf(value), value);
                       _textEditingController.text = value;
                       _textEditingController.selection =
                           TextSelection.fromPosition(
