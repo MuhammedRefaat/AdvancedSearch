@@ -69,8 +69,11 @@ class AdvancedSearch extends StatefulWidget {
   /// Function to be called on editing the text field
   final SubmitResults onEditingProgress;
 
+  /// Text Inout Background Color
+  final Color inputTextFieldBgColor;
+
   ///List Background Color
-  final Color bgColor;
+  final Color searchResultsBgColor;
 
   final SearchMode searchMode;
 
@@ -104,7 +107,8 @@ class AdvancedSearch extends StatefulWidget {
     this.enabled = true,
     this.onSubmitted,
     this.onEditingProgress,
-    this.bgColor = Colors.white,
+    this.inputTextFieldBgColor,
+    this.searchResultsBgColor = Colors.white,
     this.searchMode = SearchMode.CONTAINS,
     this.caseSensitive = false,
     this.minLettersForSearch = 0,
@@ -234,91 +238,109 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
       physics: NeverScrollableScrollPhysics(),
       child: Column(
         children: [
-          Stack(
-            children: [
-              TextField(
-                autocorrect: widget.autoCorrect,
-                enabled: widget.enabled,
-                onEditingComplete: () {
-                  FocusScope.of(context).unfocus();
-                },
-                onSubmitted: (value) {
-                  FocusScope.of(context).unfocus();
-                },
-                onTap: () {
-                  setState(() {
-                    isItemClicked = false;
-                  });
-                },
-                controller: _textEditingController,
-                decoration: InputDecoration(
-                  hintText: widget.hintText,
-                  contentPadding: const EdgeInsets.all(10.0),
-                  disabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                        color: widget.disabledBorderColor != null
-                            ? widget.disabledBorderColor
-                            : Colors.grey[300]),
-                    borderRadius: BorderRadius.all(
+          Container(
+            decoration: BoxDecoration(
+              color: widget.inputTextFieldBgColor,
+              borderRadius: results.length == 0 || isItemClicked
+                  ? BorderRadius.all(
                       Radius.circular(widget.borderRadius),
-                    ),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: widget.enabledBorderColor != null
-                          ? widget.enabledBorderColor
-                          : Colors.grey[300],
-                    ),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(widget.borderRadius),
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                        color: widget.focusedBorderColor != null
-                            ? widget.focusedBorderColor
-                            : Colors.grey[300]),
-                    borderRadius: BorderRadius.only(
+                    )
+                  : BorderRadius.only(
                       topLeft: Radius.circular(widget.borderRadius),
                       topRight: Radius.circular(widget.borderRadius),
                     ),
+            ),
+            child: Stack(
+              children: [
+                TextField(
+                  autocorrect: widget.autoCorrect,
+                  enabled: widget.enabled,
+                  onEditingComplete: () {
+                    FocusScope.of(context).unfocus();
+                  },
+                  onSubmitted: (value) {
+                    FocusScope.of(context).unfocus();
+                  },
+                  onTap: () {
+                    setState(() {
+                      isItemClicked = false;
+                    });
+                  },
+                  controller: _textEditingController,
+                  decoration: InputDecoration(
+                    hintText: widget.hintText,
+                    contentPadding: const EdgeInsets.all(10.0),
+                    disabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: widget.disabledBorderColor != null
+                              ? widget.disabledBorderColor
+                              : Colors.grey[300]),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(widget.borderRadius),
+                      ),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: widget.enabledBorderColor != null
+                            ? widget.enabledBorderColor
+                            : Colors.grey[300],
+                      ),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(widget.borderRadius),
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: widget.focusedBorderColor != null
+                              ? widget.focusedBorderColor
+                              : Colors.grey[300]),
+                      borderRadius: results.length == 0 || isItemClicked
+                          ? BorderRadius.all(
+                              Radius.circular(widget.borderRadius),
+                            )
+                          : BorderRadius.only(
+                              topLeft: Radius.circular(widget.borderRadius),
+                              topRight: Radius.circular(widget.borderRadius),
+                            ),
+                    ),
                   ),
+                  style: TextStyle(
+                    fontSize: widget.fontSize,
+                  ),
+                  cursorColor: widget.cursorColor != null
+                      ? widget.cursorColor
+                      : Colors.grey[600],
                 ),
-                style: TextStyle(
-                  fontSize: widget.fontSize,
-                ),
-                cursorColor: widget.cursorColor != null
-                    ? widget.cursorColor
-                    : Colors.grey[600],
-              ),
-              widget.clearSearchEnabled &&
-                      _textEditingController.text.length > 0
-                  ? Align(
-                      alignment:
-                          isLtr ? Alignment.centerRight : Alignment.centerLeft,
-                      child: InkWell(
-                        onTap: () {
-                          if (_textEditingController.text.length == 0) return;
-                          setState(() {
-                            _textEditingController.clear();
-                            widget.onSearchClear();
-                            isItemClicked = true;
-                          });
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Icon(
-                            Icons.highlight_remove,
-                            size: 27,
-                            color: _textEditingController.text.length == 0
-                                ? Colors.grey[300]
-                                : Colors.grey,
+                widget.clearSearchEnabled &&
+                        _textEditingController.text.length > 0
+                    ? Align(
+                        alignment: isLtr
+                            ? Alignment.centerRight
+                            : Alignment.centerLeft,
+                        child: InkWell(
+                          onTap: () {
+                            if (_textEditingController.text.length == 0) return;
+                            setState(() {
+                              _textEditingController.clear();
+                              widget.onSearchClear();
+                              isItemClicked = true;
+                            });
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Icon(
+                              Icons.highlight_remove,
+                              size: 27,
+                              color: _textEditingController.text.length == 0
+                                  ? Colors.grey[300]
+                                  : Colors.grey,
+                            ),
                           ),
                         ),
-                      ),
-                    )
-                  : Container()
-            ],
+                      )
+                    : Container()
+              ],
+            ),
           ),
           if (!isItemClicked && widget.showListOfResults)
             Container(
@@ -346,7 +368,7 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
                       height: widget.singleItemHeight,
                       padding: const EdgeInsets.all(8.0),
                       decoration: BoxDecoration(
-                        color: widget.bgColor,
+                        color: widget.searchResultsBgColor,
                         border: Border.all(color: widget.borderColor),
                         borderRadius: BorderRadius.only(
                           bottomLeft: Radius.circular(
@@ -443,6 +465,9 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
         widget.onSearchClear();
       else
         widget.onSubmitted(lastSubmittedText, results);
+      setState(() {
+        results = [];
+      });
     } catch (e) {
       print(e.toString());
     }

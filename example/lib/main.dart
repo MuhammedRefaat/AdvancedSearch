@@ -44,7 +44,7 @@ class HomePage extends StatelessWidget {
           maxElementsToDisplay: 10,
           singleItemHeight: 50,
           borderColor: Colors.grey,
-          minLettersForSearch: 0,
+          minLettersForSearch: 3,
           selectedTextColor: Color(0xFF3363D9),
           fontSize: 14,
           borderRadius: 12.0,
@@ -52,17 +52,18 @@ class HomePage extends StatelessWidget {
           cursorColor: Colors.blueGrey,
           autoCorrect: false,
           focusedBorderColor: Colors.blue,
-          bgColor: Color(0xFAFAFA),
+          searchResultsBgColor: Color(0xFAFAFA),
           disabledBorderColor: Colors.cyan,
           enabledBorderColor: Colors.black,
           enabled: true,
           caseSensitive: false,
+          inputTextFieldBgColor: Colors.white10,
           clearSearchEnabled: true,
           itemsShownAtStart: 10,
           searchMode: SearchMode.CONTAINS,
           showListOfResults: true,
           unSelectedTextColor: Colors.black54,
-          onItemTap: (index) {
+          onItemTap: (index, value) {
             print("selected item Index is $index");
           },
           onSearchClear: () {
