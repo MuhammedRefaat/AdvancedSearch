@@ -87,6 +87,10 @@ class AdvancedSearch extends StatefulWidget {
 
   final bool showListOfResults;
 
+  final double verticalPadding;
+
+  final double horizontalPadding;
+
   const AdvancedSearch({
     @required this.data,
     @required this.maxElementsToDisplay,
@@ -115,6 +119,8 @@ class AdvancedSearch extends StatefulWidget {
     this.borderColor = const Color(0xFFFAFAFA),
     this.clearSearchEnabled = true,
     this.showListOfResults = true,
+    this.verticalPadding = 10,
+    this.horizontalPadding = 10,
   }) : assert(data != null, maxElementsToDisplay != null);
 
   @override
@@ -269,7 +275,9 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
                   controller: _textEditingController,
                   decoration: InputDecoration(
                     hintText: widget.hintText,
-                    contentPadding: const EdgeInsets.all(10.0),
+                    contentPadding: EdgeInsets.symmetric(
+                        vertical: widget.verticalPadding,
+                        horizontal: widget.horizontalPadding),
                     disabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                           color: widget.disabledBorderColor != null
@@ -313,27 +321,34 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
                 ),
                 widget.clearSearchEnabled &&
                         _textEditingController.text.length > 0
-                    ? Align(
-                        alignment: isLtr
-                            ? Alignment.centerRight
-                            : Alignment.centerLeft,
-                        child: InkWell(
-                          onTap: () {
-                            if (_textEditingController.text.length == 0) return;
-                            setState(() {
-                              _textEditingController.clear();
-                              widget.onSearchClear();
-                              isItemClicked = true;
-                            });
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Icon(
-                              Icons.highlight_remove,
-                              size: 27,
-                              color: _textEditingController.text.length == 0
-                                  ? Colors.grey[300]
-                                  : Colors.grey,
+                    ? Positioned(
+                        right: 0,
+                        top: 0,
+                        bottom: 0,
+                        left: 0,
+                        child: Align(
+                          alignment: isLtr
+                              ? Alignment.centerRight
+                              : Alignment.centerLeft,
+                          child: InkWell(
+                            onTap: () {
+                              if (_textEditingController.text.length == 0)
+                                return;
+                              setState(() {
+                                _textEditingController.clear();
+                                widget.onSearchClear();
+                                isItemClicked = true;
+                              });
+                            },
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 10),
+                              child: Icon(
+                                Icons.highlight_remove,
+                                size: 27,
+                                color: _textEditingController.text.length == 0
+                                    ? Colors.grey[300]
+                                    : Colors.grey,
+                              ),
                             ),
                           ),
                         ),

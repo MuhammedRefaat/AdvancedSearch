@@ -63,6 +63,8 @@ class HomePage extends StatelessWidget {
           searchMode: SearchMode.CONTAINS,
           showListOfResults: true,
           unSelectedTextColor: Colors.black54,
+          verticalPadding: 10,
+          horizontalPadding: 10,
           onItemTap: (index, value) {
             print("selected item Index is $index");
           },
