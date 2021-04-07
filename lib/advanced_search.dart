@@ -360,8 +360,8 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
                             child: Padding(
                               padding: EdgeInsets.symmetric(horizontal: 10),
                               child: Icon(
-                                Icons.highlight_remove,
-                                size: 27,
+                                Icons.close,
+                                size: 20,
                                 color: _textEditingController.text.length == 0
                                     ? Colors.grey[300]
                                     : Colors.grey,
