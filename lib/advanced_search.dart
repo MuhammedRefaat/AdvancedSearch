@@ -87,6 +87,8 @@ class AdvancedSearch extends StatefulWidget {
 
   final bool showListOfResults;
 
+  final bool hideHintOnTextInoutFocus;
+
   final double verticalPadding;
 
   final double horizontalPadding;
@@ -119,6 +121,7 @@ class AdvancedSearch extends StatefulWidget {
     this.borderColor = const Color(0xFFFAFAFA),
     this.clearSearchEnabled = true,
     this.showListOfResults = true,
+    this.hideHintOnTextInoutFocus = false,
     this.verticalPadding = 10,
     this.horizontalPadding = 10,
   }) : assert(data != null, maxElementsToDisplay != null);
@@ -131,6 +134,7 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
   List<String> results = [];
   bool isItemClicked = false;
   String lastSubmittedText = "";
+  String hintText;
 
   final TextEditingController _textEditingController = TextEditingController();
 
@@ -138,6 +142,8 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
   void initState() {
     super.initState();
     _textEditingController..addListener(onSearchTextChanges);
+
+    hintText = widget.hintText;
 
     var keyboardVisibilityController = KeyboardVisibilityController();
 
@@ -149,6 +155,17 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
             sendSubmitResults(_textEditingController.text);
           }
           FocusScope.of(context).unfocus();
+          if (widget.hideHintOnTextInoutFocus) {
+            setState(() {
+              hintText = widget.hintText;
+            });
+          }
+        } else {
+          if (widget.hideHintOnTextInoutFocus) {
+            setState(() {
+              hintText = "";
+            });
+          }
         }
       });
     });
@@ -274,7 +291,7 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
                   },
                   controller: _textEditingController,
                   decoration: InputDecoration(
-                    hintText: widget.hintText,
+                    hintText: hintText,
                     contentPadding: EdgeInsets.symmetric(
                         vertical: widget.verticalPadding,
                         horizontal: widget.horizontalPadding),

@@ -65,6 +65,7 @@ class HomePage extends StatelessWidget {
           unSelectedTextColor: Colors.black54,
           verticalPadding: 10,
           horizontalPadding: 10,
+          hideHintOnTextInoutFocus: true,
           onItemTap: (index, value) {
             print("selected item Index is $index");
           },
