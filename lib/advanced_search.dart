@@ -83,6 +83,8 @@ class AdvancedSearch extends StatefulWidget {
 
   final Color borderColor;
 
+  final Color hintTextColor;
+
   final bool clearSearchEnabled;
 
   final bool showListOfResults;
@@ -119,6 +121,7 @@ class AdvancedSearch extends StatefulWidget {
     this.caseSensitive = false,
     this.minLettersForSearch = 0,
     this.borderColor = const Color(0xFFFAFAFA),
+    this.hintTextColor = Colors.grey,
     this.clearSearchEnabled = true,
     this.showListOfResults = true,
     this.hideHintOnTextInoutFocus = false,
@@ -292,6 +295,9 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
                   controller: _textEditingController,
                   decoration: InputDecoration(
                     hintText: hintText,
+                    hintStyle: TextStyle(
+                      color: widget.hintTextColor,
+                    ),
                     contentPadding: EdgeInsets.symmetric(
                         vertical: widget.verticalPadding,
                         horizontal: widget.horizontalPadding),
