@@ -1,5 +1,6 @@
 library advanced_search;
 
+import 'package:custom_rounded_rectangle_border/custom_rounded_rectangle_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
@@ -403,18 +404,12 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
                       });
                     },
                     child: Container(
-                      decoration: BoxDecoration(
-                        border: Border(
-                          left: BorderSide(color: widget.borderColor),
-                          right: BorderSide(color: widget.borderColor),
-                          bottom: BorderSide(color: widget.borderColor),
-                        ),
-                      ),
-                      child: Container(
-                        height: widget.singleItemHeight,
-                        padding: const EdgeInsets.all(8.0),
-                        decoration: BoxDecoration(
-                          color: widget.searchResultsBgColor,
+                      height: widget.singleItemHeight,
+                      padding: const EdgeInsets.all(8.0),
+                      child: _getRichText(results[index]),
+                      decoration: ShapeDecoration(
+                        color: widget.searchResultsBgColor,
+                        shape: CustomRoundedRectangleBorder(
                           borderRadius: BorderRadius.only(
                             bottomLeft: Radius.circular(
                               index == (results.length - 1)
@@ -427,8 +422,14 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
                                   : 0.0,
                             ),
                           ),
+                          leftSide: BorderSide(color: widget.borderColor),
+                          bottomLeftCornerSide:
+                              BorderSide(color: widget.borderColor),
+                          rightSide: BorderSide(color: widget.borderColor),
+                          bottomRightCornerSide:
+                              BorderSide(color: widget.borderColor),
+                          bottomSide: BorderSide(color: widget.borderColor),
                         ),
-                        child: _getRichText(results[index]),
                       ),
                     ),
                   );
