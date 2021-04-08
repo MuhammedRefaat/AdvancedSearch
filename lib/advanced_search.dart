@@ -442,6 +442,9 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
   }
 
   void onSearchTextChanges() {
+    setState(() {
+      isItemClicked = false;
+    });
     if (_textEditingController.text.length < widget.minLettersForSearch) {
       setState(() {
         results = [];
