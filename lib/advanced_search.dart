@@ -403,25 +403,33 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
                       });
                     },
                     child: Container(
-                      height: widget.singleItemHeight,
-                      padding: const EdgeInsets.all(8.0),
                       decoration: BoxDecoration(
-                        color: widget.searchResultsBgColor,
-                        border: Border.all(color: widget.borderColor),
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(
-                            index == (results.length - 1)
-                                ? widget.borderRadius
-                                : 0.0,
-                          ),
-                          bottomRight: Radius.circular(
-                            index == (results.length - 1)
-                                ? widget.borderRadius
-                                : 0.0,
-                          ),
+                        border: Border(
+                          left: BorderSide(color: widget.borderColor),
+                          right: BorderSide(color: widget.borderColor),
+                          bottom: BorderSide(color: widget.borderColor),
                         ),
                       ),
-                      child: _getRichText(results[index]),
+                      child: Container(
+                        height: widget.singleItemHeight,
+                        padding: const EdgeInsets.all(8.0),
+                        decoration: BoxDecoration(
+                          color: widget.searchResultsBgColor,
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(
+                              index == (results.length - 1)
+                                  ? widget.borderRadius
+                                  : 0.0,
+                            ),
+                            bottomRight: Radius.circular(
+                              index == (results.length - 1)
+                                  ? widget.borderRadius
+                                  : 0.0,
+                            ),
+                          ),
+                        ),
+                        child: _getRichText(results[index]),
+                      ),
                     ),
                   );
                 },
