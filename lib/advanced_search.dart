@@ -90,7 +90,7 @@ class AdvancedSearch extends StatefulWidget {
 
   final bool showListOfResults;
 
-  final bool hideHintOnTextInoutFocus;
+  final bool hideHintOnTextInputFocus;
 
   final double verticalPadding;
 
@@ -125,7 +125,7 @@ class AdvancedSearch extends StatefulWidget {
     this.hintTextColor = Colors.grey,
     this.clearSearchEnabled = true,
     this.showListOfResults = true,
-    this.hideHintOnTextInoutFocus = false,
+    this.hideHintOnTextInputFocus = false,
     this.verticalPadding = 10,
     this.horizontalPadding = 10,
   }) : assert(data != null, maxElementsToDisplay != null);
@@ -159,13 +159,13 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
             sendSubmitResults(_textEditingController.text);
           }
           FocusScope.of(context).unfocus();
-          if (widget.hideHintOnTextInoutFocus) {
+          if (widget.hideHintOnTextInputFocus) {
             setState(() {
               hintText = widget.hintText;
             });
           }
         } else {
-          if (widget.hideHintOnTextInoutFocus) {
+          if (widget.hideHintOnTextInputFocus) {
             setState(() {
               hintText = "";
             });
@@ -283,6 +283,7 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
                   autocorrect: widget.autoCorrect,
                   enabled: widget.enabled,
                   onEditingComplete: () {
+                    sendSubmitResults(_textEditingController.text);
                     FocusScope.of(context).unfocus();
                   },
                   onSubmitted: (value) {
@@ -442,6 +443,13 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
   }
 
   void onSearchTextChanges() {
+    if (lastSubmittedText == _textEditingController.text &&
+        isItemClicked == true) {
+      setState(() {
+        isItemClicked = false;
+      });
+      return;
+    }
     setState(() {
       isItemClicked = false;
     });
@@ -505,6 +513,9 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
   void sendSubmitResults(value) {
     try {
       if (lastSubmittedText == value) {
+        setState(() {
+          results = [];
+        });
         return; // Nothing new to Submit
       }
       lastSubmittedText = value;
