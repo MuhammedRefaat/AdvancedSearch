@@ -1,7 +1,7 @@
 # AdvancedSearch
 Flutter library provides advanced capabilitis for searching through a predefined list using TextField
 
-<img src="advanced_search.gif" height="800" />
+<img src="advanced_search.gif" height="700" />
 
 ## How it works? Code talks better:
 ```
@@ -28,12 +28,14 @@ AdvancedSearch( // This is basically an Input Text Field
 ## The complete set of features this package gives you
 
 ### Callbacks:
-    @required data // your set of searchable data (give empty list if you don't want to provide one, then you can take the submitted search text and do whatever you want)
-    @required maxElementsToDisplay // as search results, what is the Maximum number you want to have
     @required onItemTap // when user selects one of the displayed search results
     @required onSearchClear // when user clears his search
     onSubmitted // on submitting a search result
     onEditingProgress // when the user is writing down his search words, want to give him live results? use this one
+    
+### Required Inputs:    
+    @required data // your set of searchable data (give empty list if you don't want to provide one, then you can take the submitted search text and do whatever you want)
+    @required maxElementsToDisplay // as search results, what is the Maximum number you want to have
     
 ### Options:    
     selectedTextColor // what is the text color that should reflects the matching text in search results
