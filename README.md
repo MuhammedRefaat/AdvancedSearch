@@ -43,17 +43,22 @@ AdvancedSearch( // This is basically an Input Text Field
     borderRadius (Default = 10.0) // radius for search results list border
     fontSize (Default = 14.0) // for TextField and Search Results
     singleItemHeight (Default = 45.0) // height for every single item in the search results list
+    verticalPadding (Default = 10.0) // Vertical Padding for the TextField
+    horizontalPadding (Default = 10.0) // Horizontal Padding for the TextField
     itemsShownAtStart (Default = 10) // if the user didn't start sraching yet but clicked the search TextField, how many items should be displayed to him
     hintText (Default = 'Enter a name') // hint text for search TextField
+    hintTextColor (Default = Colors.grey) // hint text color
     autoCorrect (Default = false) // AutoCorrect functioanlity for TextField inputs
     enabled (Default = true) // is the search should be enabled now, or not
     bgColor (Default = Colors.white) // Background Color for Search Results widget
+    inputTextFieldBgColor // Background Color for the TextField itself
     borderColor (Default = const Color(0xFFFAFAFA)) // Border Color for Search Results widget
     searchMode (Default = SearchMode.CONTAINS) // what is the search criteria you want to Apply? should the results CONTAINS, STARTING_WITH, or EXACT_MATCH your search
     caseSensitive (Default = false) // want your search to be applied on the searchable list as case sensitive, or not
     minLettersForSearch (Default = 0) // what is the minimum letters that the user should type before starting to receive search results
     clearSearchEnabled (Default = true) // should the user be able to clear his search, or not
     showListOfResults (Default = true) // should a list of results be displayed to the user, or shall you just get what he searches for and you will do your things by your own
+    hideHintOnTextInputFocus (Default = false) // an option to hide the hin t text once the TextField get focused
     
 
 ## So basically you can build your widget like that
@@ -63,26 +68,31 @@ AdvancedSearch(
   data: ['Orange', 'Watermelon', 'Banana', 'Red Grapes'],
   maxElementsToDisplay: 10,
   singleItemHeight: 50,
-  borderColor: Colors.red,
-  minLettersForSearch: 3,
+  borderColor: Colors.grey,
+  minLettersForSearch: 0,
   selectedTextColor: Color(0xFF3363D9),
   fontSize: 14,
   borderRadius: 12.0,
   hintText: 'Search Me',
   cursorColor: Colors.blueGrey,
   autoCorrect: false,
-  focusedBorderColor: Colors.redAccent,
-  bgColor: Color(0xFAFAFA),
+  focusedBorderColor: Colors.blue,
+  searchResultsBgColor: Color(0xFAFAFA),
   disabledBorderColor: Colors.cyan,
   enabledBorderColor: Colors.black,
   enabled: true,
   caseSensitive: false,
+  inputTextFieldBgColor: Colors.white10,
   clearSearchEnabled: true,
-  itemsShownAtStart: 3,
+  itemsShownAtStart: 10,
   searchMode: SearchMode.CONTAINS,
   showListOfResults: true,
   unSelectedTextColor: Colors.black54,
-  onItemTap: (index) {
+  verticalPadding: 10,
+  horizontalPadding: 10,
+  hideHintOnTextInputFocus: true,
+  hintTextColor: Colors.grey,
+  onItemTap: (index, value) {
     print("selected item index is $index");
   },
   onSearchClear: () {
