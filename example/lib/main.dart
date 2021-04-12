@@ -44,7 +44,7 @@ class HomePage extends StatelessWidget {
           maxElementsToDisplay: 10,
           singleItemHeight: 50,
           borderColor: Colors.grey,
-          minLettersForSearch: 3,
+          minLettersForSearch: 0,
           selectedTextColor: Color(0xFF3363D9),
           fontSize: 14,
           borderRadius: 12.0,
@@ -66,6 +66,7 @@ class HomePage extends StatelessWidget {
           verticalPadding: 10,
           horizontalPadding: 10,
           hideHintOnTextInputFocus: true,
+          hintTextColor: Colors.grey,
           onItemTap: (index, value) {
             print("selected item Index is $index");
           },
