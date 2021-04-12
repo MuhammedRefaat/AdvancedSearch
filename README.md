@@ -1,6 +1,8 @@
 # AdvancedSearch
 Flutter library provides advanced capabilitis for searching through a predefined list using TextField
 
+<img src="advanced_search.gif" height="800" />
+
 ## How it works? Code talks better:
 ```
 List<String> searchableList = ['Orange', 'Watermelon', 'Banana', ...etc];
