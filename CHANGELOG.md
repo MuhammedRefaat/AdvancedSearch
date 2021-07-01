@@ -1,3 +1,6 @@
+## [2.0.0] - 30/7/2021
+Added Null Safety Support
+
 ## [1.0.6] - 22/7/2020
 Updated documentation related to the new onItemTap functionality
 

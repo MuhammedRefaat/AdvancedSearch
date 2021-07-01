@@ -1,8 +1,8 @@
 library advanced_search;
 
-import 'package:custom_rounded_rectangle_border/custom_rounded_rectangle_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'CustomRoundedRectangleBorder';
 
 typedef OnTap = void Function(int index, String value);
 typedef SubmitResults = void Function(
@@ -18,23 +18,23 @@ class AdvancedSearch extends StatefulWidget {
 
   ///The color of text which actually appears in the results for which the text
   ///is typed
-  final Color selectedTextColor;
+  final Color? selectedTextColor;
 
   ///The color of text which actually appears in the results for the
   ///remaining text
-  final Color unSelectedTextColor;
+  final Color? unSelectedTextColor;
 
   ///Color of the border when the TextField is enabled
-  final Color enabledBorderColor;
+  final Color? enabledBorderColor;
 
   ///Color of the border when the TextField is disabled
-  final Color disabledBorderColor;
+  final Color? disabledBorderColor;
 
   ///Color of the border when the TextField is being integrated with
-  final Color focusedBorderColor;
+  final Color? focusedBorderColor;
 
   ///Color of the cursor
-  final Color cursorColor;
+  final Color? cursorColor;
 
   ///Border Radius of the TextField and the resultant elements
   final double borderRadius;
@@ -58,7 +58,7 @@ class AdvancedSearch extends StatefulWidget {
   final bool enabled;
 
   ///onSubmitted function
-  final SubmitResults onSubmitted;
+  final SubmitResults? onSubmitted;
 
   ///Function to call when a certain item is clicked
   /// Takes in a parameter of the item which was clicked
@@ -68,10 +68,10 @@ class AdvancedSearch extends StatefulWidget {
   final Function onSearchClear;
 
   /// Function to be called on editing the text field
-  final SubmitResults onEditingProgress;
+  final SubmitResults? onEditingProgress;
 
   /// Text Inout Background Color
-  final Color inputTextFieldBgColor;
+  final Color? inputTextFieldBgColor;
 
   ///List Background Color
   final Color searchResultsBgColor;
@@ -97,10 +97,10 @@ class AdvancedSearch extends StatefulWidget {
   final double horizontalPadding;
 
   const AdvancedSearch({
-    @required this.data,
-    @required this.maxElementsToDisplay,
-    @required this.onItemTap,
-    @required this.onSearchClear,
+    required this.data,
+    required this.maxElementsToDisplay,
+    required this.onItemTap,
+    required this.onSearchClear,
     this.selectedTextColor,
     this.unSelectedTextColor,
     this.enabledBorderColor,
@@ -138,7 +138,7 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
   List<String> results = [];
   bool isItemClicked = false;
   String lastSubmittedText = "";
-  String hintText;
+  String? hintText;
 
   final TextEditingController _textEditingController = TextEditingController();
 
@@ -306,8 +306,8 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
                     disabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                           color: widget.disabledBorderColor != null
-                              ? widget.disabledBorderColor
-                              : Colors.grey[300]),
+                              ? widget.disabledBorderColor!
+                              : Colors.grey[300]!),
                       borderRadius: BorderRadius.all(
                         Radius.circular(widget.borderRadius),
                       ),
@@ -315,8 +315,8 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                         color: widget.enabledBorderColor != null
-                            ? widget.enabledBorderColor
-                            : Colors.grey[300],
+                            ? widget.enabledBorderColor!
+                            : Colors.grey[300]!,
                       ),
                       borderRadius: BorderRadius.all(
                         Radius.circular(widget.borderRadius),
@@ -325,8 +325,8 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                           color: widget.focusedBorderColor != null
-                              ? widget.focusedBorderColor
-                              : Colors.grey[300]),
+                              ? widget.focusedBorderColor!
+                              : Colors.grey[300]!),
                       borderRadius: results.length == 0 || isItemClicked
                           ? BorderRadius.all(
                               Radius.circular(widget.borderRadius),
@@ -506,7 +506,7 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
     }
     // now send the latest updates
     if (widget.onEditingProgress != null) {
-      widget.onEditingProgress(_textEditingController.text, results);
+      widget.onEditingProgress!(_textEditingController.text, results);
     }
   }
 
@@ -525,7 +525,7 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
       if (lastSubmittedText == "")
         widget.onSearchClear();
       else
-        widget.onSubmitted(lastSubmittedText, results);
+        widget.onSubmitted!(lastSubmittedText, results);
       setState(() {
         results = [];
       });
