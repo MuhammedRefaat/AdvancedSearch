@@ -153,25 +153,27 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
 
     // Subscribe
     keyboardVisibilityController.onChange.listen((bool visible) {
-      setState(() {
-        if (!visible) {
-          if (_textEditingController.text != null) {
-            sendSubmitResults(_textEditingController.text);
+      if(mounted) {
+        setState(() {
+          if (!visible) {
+            if (_textEditingController.text != null) {
+              sendSubmitResults(_textEditingController.text);
+            }
+            removeTextFieldFocus();
+            if (widget.hideHintOnTextInputFocus) {
+              setState(() {
+                hintText = widget.hintText;
+              });
+            }
+          } else {
+            if (widget.hideHintOnTextInputFocus) {
+              setState(() {
+                hintText = "";
+              });
+            }
           }
-          FocusScope.of(context).unfocus();
-          if (widget.hideHintOnTextInputFocus) {
-            setState(() {
-              hintText = widget.hintText;
-            });
-          }
-        } else {
-          if (widget.hideHintOnTextInputFocus) {
-            setState(() {
-              hintText = "";
-            });
-          }
-        }
-      });
+        });
+      }
     });
   }
 
@@ -284,10 +286,10 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
                   enabled: widget.enabled,
                   onEditingComplete: () {
                     sendSubmitResults(_textEditingController.text);
-                    FocusScope.of(context).unfocus();
+                    removeTextFieldFocus();
                   },
                   onSubmitted: (value) {
-                    FocusScope.of(context).unfocus();
+                    removeTextFieldFocus();
                   },
                   onTap: () {
                     setState(() {
@@ -530,6 +532,14 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
         results = [];
       });
     } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  void removeTextFieldFocus() {
+    try{
+      FocusScope.of(context).unfocus();
+    }catch(e){
       print(e.toString());
     }
   }
