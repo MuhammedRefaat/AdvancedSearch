@@ -1,3 +1,6 @@
+## [2.1.0] - 11/3/2022
+Handled some cases with lost widget state
+
 ## [2.0.0] - 30/7/2021
 Added Null Safety Support
 
