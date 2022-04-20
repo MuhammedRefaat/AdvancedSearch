@@ -8,6 +8,7 @@ typedef OnTap = void Function(int index, String value);
 typedef SubmitResults = void Function(
     String searchText, List<String> searchResults);
 typedef SearchClear = void Function();
+typedef WidgetItems = Widget Function(String);
 
 ///Class for adding AutoSearchInput to your project
 class AdvancedSearch extends StatefulWidget {
@@ -97,7 +98,7 @@ class AdvancedSearch extends StatefulWidget {
 
   final double horizontalPadding;
 
-  final Function<Widget>(String text)? searchItemsWidget;
+  final WidgetItems? searchItemsWidget;
 
   const AdvancedSearch({
     required this.searchItems,

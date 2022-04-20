@@ -67,6 +67,7 @@ class HomePage extends StatelessWidget {
           horizontalPadding: 10,
           hideHintOnTextInputFocus: true,
           hintTextColor: Colors.grey,
+          searchItemsWidget: searchWidget,
           onItemTap: (index, value) {
             print("selected item Index is $index");
           },
@@ -80,6 +81,28 @@ class HomePage extends StatelessWidget {
             print("TextEdited: " + value);
             print("LENGTH: " + value2.length.toString());
           },
+        ),
+      ),
+    );
+  }
+
+  Widget searchWidget(String text) {
+    return ListTile(
+      title: Text(
+        text.length > 3 ? text.substring(0, 3) : text,
+        style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+            color: Colors.indigoAccent),
+      ),
+      subtitle: Text(
+        text,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: TextStyle(
+          fontWeight: FontWeight.normal,
+          fontSize: 12,
+          color: Colors.black26,
         ),
       ),
     );
