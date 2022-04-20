@@ -7,7 +7,7 @@ packages:
       path: "/Users/muhammedrefaat/projects/advanced_search"
       relative: false
     source: path
-    version: "2.2.0"
+    version: "2.2.1"
   async:
     dependency: transitive
     description:

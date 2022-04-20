@@ -100,6 +100,8 @@ class AdvancedSearch extends StatefulWidget {
 
   final WidgetItems? searchItemsWidget;
 
+  final autoListing;
+
   const AdvancedSearch({
     required this.searchItems,
     required this.onItemTap,
@@ -133,6 +135,7 @@ class AdvancedSearch extends StatefulWidget {
     this.verticalPadding = 10,
     this.horizontalPadding = 10,
     this.searchItemsWidget,
+    this.autoListing = false,
   });
 
   @override
@@ -185,6 +188,13 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
         });
       }
     });
+    if (widget.autoListing) {
+      try {
+        onSearchTextChanges();
+      } catch (e) {
+        print(e.toString());
+      }
+    }
   }
 
   @override

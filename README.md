@@ -43,7 +43,7 @@ AdvancedSearch( // This is basically an Input Text Field
     disabledBorderColor // Border color of TextField when it's disabled
     focusedBorderColor // Border color of TextField when it's on focus 
     cursorColor // Cursor Color, nothing more to tell
-    searchItemsWidget // Here you can pass a function that takes a String (will be replaced by search result item) and returns a Widget which will be used to list the search results instead of the default one
+    searchItemsWidget // Here you can pass a function that takes a String (will be replaced by search result item) and returns a Widget which will be used to list the search results instead of the default one [Don't forget to pass a reasonable singleItemHeight if you are passing this attribute]
     maxElementsToDisplay (Default = 7) // as search results, what is the Maximum number you want to have
     borderRadius (Default = 10.0) // radius for search results list border
     fontSize (Default = 14.0) // for TextField and Search Results
@@ -64,6 +64,7 @@ AdvancedSearch( // This is basically an Input Text Field
     clearSearchEnabled (Default = true) // should the user be able to clear his search, or not
     showListOfResults (Default = true) // should a list of results be displayed to the user, or shall you just get what he searches for and you will do your things by your own
     hideHintOnTextInputFocus (Default = false) // an option to hide the hin t text once the TextField get focused
+    autoListing (Default = false) // an option to display the results instandly without searching (in this case it shall display the max elements to be shown)
 
 ## So basically you can build your widget like that
 
