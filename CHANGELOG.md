@@ -1,3 +1,6 @@
+## [2.2.3] - 20/4/2022
+Fix for autoListing
+
 ## [2.2.2] - 20/4/2022
 Added a new parameter [autoListing] which allows the user to display the initial results directly without having to search (in this case it shall display an items <= [maxElementsToDisplay])
 
