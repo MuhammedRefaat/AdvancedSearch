@@ -100,7 +100,7 @@ class AdvancedSearch extends StatefulWidget {
 
   final WidgetItems? searchItemsWidget;
 
-  final autoListing;
+  final bool autoListing;
 
   const AdvancedSearch({
     required this.searchItems,
