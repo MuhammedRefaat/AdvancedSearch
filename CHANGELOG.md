@@ -1,3 +1,7 @@
+## [2.2.0] - 20/4/2022
+- Added a new parameter [searchItemsWidget] which allows the user to add a custom widget for results listing instead of the default one.
+- Now onSearchClear and maxElementsToDisplay are Optional.
+
 ## [2.1.0] - 11/3/2022
 Handled some cases with lost widget state
 
