@@ -29,13 +29,12 @@ AdvancedSearch( // This is basically an Input Text Field
 
 ### Callbacks:
     @required onItemTap // when user selects one of the displayed search results
-    @required onSearchClear // when user clears his search
+    onSearchClear // when user clears his search
     onSubmitted // on submitting a search result
     onEditingProgress // when the user is writing down his search words, want to give him live results? use this one
     
 ### Required Inputs:    
-    @required data // your set of searchable data (give empty list if you don't want to provide one, then you can take the submitted search text and do whatever you want)
-    @required maxElementsToDisplay // as search results, what is the Maximum number you want to have
+    @required searchItems // your set of searchable data (give empty list if you don't want to provide one, then you can take the submitted search text and do whatever you want)
     
 ### Options:    
     selectedTextColor // what is the text color that should reflects the matching text in search results
@@ -44,6 +43,8 @@ AdvancedSearch( // This is basically an Input Text Field
     disabledBorderColor // Border color of TextField when it's disabled
     focusedBorderColor // Border color of TextField when it's on focus 
     cursorColor // Cursor Color, nothing more to tell
+    searchItemsWidget // Here you can pass a function that takes a String (will be replaced by search result item) and returns a Widget which will be used to list the search results instead of the default one
+    maxElementsToDisplay (Default = 7) // as search results, what is the Maximum number you want to have
     borderRadius (Default = 10.0) // radius for search results list border
     fontSize (Default = 14.0) // for TextField and Search Results
     singleItemHeight (Default = 45.0) // height for every single item in the search results list
@@ -63,7 +64,6 @@ AdvancedSearch( // This is basically an Input Text Field
     clearSearchEnabled (Default = true) // should the user be able to clear his search, or not
     showListOfResults (Default = true) // should a list of results be displayed to the user, or shall you just get what he searches for and you will do your things by your own
     hideHintOnTextInputFocus (Default = false) // an option to hide the hin t text once the TextField get focused
-    
 
 ## So basically you can build your widget like that
 
