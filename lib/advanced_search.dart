@@ -7,11 +7,12 @@ import 'CustomRoundedRectangleBorder';
 typedef OnTap = void Function(int index, String value);
 typedef SubmitResults = void Function(
     String searchText, List<String> searchResults);
+typedef SearchClear = void Function();
 
 ///Class for adding AutoSearchInput to your project
 class AdvancedSearch extends StatefulWidget {
   ///List of data that can be searched through for the results
-  final List<String> data;
+  final List<String> searchItems;
 
   ///The max number of elements to be displayed when the TextField is clicked
   final int maxElementsToDisplay;
@@ -65,7 +66,7 @@ class AdvancedSearch extends StatefulWidget {
   final OnTap onItemTap;
 
   /// Callback to be called when the user clears his search
-  final Function onSearchClear;
+  final SearchClear onSearchClear;
 
   /// Function to be called on editing the text field
   final SubmitResults? onEditingProgress;
@@ -96,11 +97,13 @@ class AdvancedSearch extends StatefulWidget {
 
   final double horizontalPadding;
 
+  final Function<Widget>(String text)? searchItemsWidget;
+
   const AdvancedSearch({
-    required this.data,
-    required this.maxElementsToDisplay,
+    required this.searchItems,
     required this.onItemTap,
-    required this.onSearchClear,
+    this.maxElementsToDisplay = 7,
+    this.onSearchClear = _searchClearDefaultFunction,
     this.selectedTextColor,
     this.unSelectedTextColor,
     this.enabledBorderColor,
@@ -128,10 +131,16 @@ class AdvancedSearch extends StatefulWidget {
     this.hideHintOnTextInputFocus = false,
     this.verticalPadding = 10,
     this.horizontalPadding = 10,
-  }) : assert(data != null, maxElementsToDisplay != null);
+    this.searchItemsWidget,
+  });
 
   @override
   _AdvancedSearchState createState() => _AdvancedSearchState();
+
+  static _searchClearDefaultFunction() {
+    // Nothing to do here,
+    // if the user don't want to do anything special in clearing so that's it
+  }
 }
 
 class _AdvancedSearchState extends State<AdvancedSearch> {
@@ -153,7 +162,7 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
 
     // Subscribe
     keyboardVisibilityController.onChange.listen((bool visible) {
-      if(mounted) {
+      if (mounted) {
         setState(() {
           if (!visible) {
             if (_textEditingController.text != null) {
@@ -394,7 +403,8 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
                   return GestureDetector(
                     onTap: () {
                       String value = results[index];
-                      widget.onItemTap(widget.data.indexOf(value), value);
+                      widget.onItemTap(
+                          widget.searchItems.indexOf(value), value);
                       _textEditingController.text = value;
                       _textEditingController.selection =
                           TextSelection.fromPosition(
@@ -406,35 +416,39 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
                         isItemClicked = true;
                       });
                     },
-                    child: Container(
-                      height: widget.singleItemHeight,
-                      padding: const EdgeInsets.all(8.0),
-                      child: _getRichText(results[index]),
-                      decoration: ShapeDecoration(
-                        color: widget.searchResultsBgColor,
-                        shape: CustomRoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(
-                              index == (results.length - 1)
-                                  ? widget.borderRadius
-                                  : 0.0,
-                            ),
-                            bottomRight: Radius.circular(
-                              index == (results.length - 1)
-                                  ? widget.borderRadius
-                                  : 0.0,
+                    child: widget.searchItemsWidget != null
+                        ? widget.searchItemsWidget!(results[index])
+                        : Container(
+                            height: widget.singleItemHeight,
+                            padding: const EdgeInsets.all(8.0),
+                            child: _getRichText(results[index]),
+                            decoration: ShapeDecoration(
+                              color: widget.searchResultsBgColor,
+                              shape: CustomRoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(
+                                    index == (results.length - 1)
+                                        ? widget.borderRadius
+                                        : 0.0,
+                                  ),
+                                  bottomRight: Radius.circular(
+                                    index == (results.length - 1)
+                                        ? widget.borderRadius
+                                        : 0.0,
+                                  ),
+                                ),
+                                leftSide: BorderSide(color: widget.borderColor),
+                                bottomLeftCornerSide:
+                                    BorderSide(color: widget.borderColor),
+                                rightSide:
+                                    BorderSide(color: widget.borderColor),
+                                bottomRightCornerSide:
+                                    BorderSide(color: widget.borderColor),
+                                bottomSide:
+                                    BorderSide(color: widget.borderColor),
+                              ),
                             ),
                           ),
-                          leftSide: BorderSide(color: widget.borderColor),
-                          bottomLeftCornerSide:
-                              BorderSide(color: widget.borderColor),
-                          rightSide: BorderSide(color: widget.borderColor),
-                          bottomRightCornerSide:
-                              BorderSide(color: widget.borderColor),
-                          bottomSide: BorderSide(color: widget.borderColor),
-                        ),
-                      ),
-                    ),
                   );
                 },
               ),
@@ -466,7 +480,7 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
       switch (widget.searchMode) {
         case SearchMode.STARTING_WITH:
           setState(() {
-            results = widget.data
+            results = widget.searchItems
                 .where(
                   (element) =>
                       (widget.caseSensitive ? element : element.toLowerCase())
@@ -477,7 +491,7 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
           break;
         case SearchMode.CONTAINS:
           setState(() {
-            results = widget.data
+            results = widget.searchItems
                 .where(
                   (element) =>
                       (widget.caseSensitive ? element : element.toLowerCase())
@@ -488,7 +502,7 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
           break;
         case SearchMode.EXACT_MATCH:
           setState(() {
-            results = widget.data
+            results = widget.searchItems
                 .where(
                   (element) =>
                       (widget.caseSensitive
@@ -537,9 +551,9 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
   }
 
   void removeTextFieldFocus() {
-    try{
+    try {
       FocusScope.of(context).unfocus();
-    }catch(e){
+    } catch (e) {
       print(e.toString());
     }
   }

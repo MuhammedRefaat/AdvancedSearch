@@ -40,7 +40,7 @@ class HomePage extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.only(top: 30.0, left: 30, right: 30),
         child: AdvancedSearch(
-          data: searchableList,
+          searchItems: searchableList,
           maxElementsToDisplay: 10,
           singleItemHeight: 50,
           borderColor: Colors.grey,
