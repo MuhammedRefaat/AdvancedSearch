@@ -5,8 +5,7 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'CustomRoundedRectangleBorder';
 
 typedef OnTap = void Function(int index, String value);
-typedef SubmitResults = void Function(
-    String searchText, List<String> searchResults);
+typedef SubmitResults = void Function(String searchText, List<String> searchResults);
 typedef SearchClear = void Function();
 typedef WidgetItems = Widget Function(String);
 
@@ -102,7 +101,9 @@ class AdvancedSearch extends StatefulWidget {
 
   final bool autoListing;
 
-  const AdvancedSearch({
+  final TextEditingController textEditingController;
+
+  AdvancedSearch({
     required this.searchItems,
     required this.onItemTap,
     this.maxElementsToDisplay = 7,
@@ -136,7 +137,8 @@ class AdvancedSearch extends StatefulWidget {
     this.horizontalPadding = 10,
     this.searchItemsWidget,
     this.autoListing = false,
-  });
+    TextEditingController? textEditingController,
+  }) : this.textEditingController = textEditingController ?? TextEditingController();
 
   @override
   _AdvancedSearchState createState() => _AdvancedSearchState();
@@ -153,12 +155,10 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
   String lastSubmittedText = "";
   String? hintText;
 
-  final TextEditingController _textEditingController = TextEditingController();
-
   @override
   void initState() {
     super.initState();
-    _textEditingController..addListener(onSearchTextChanges);
+    widget.textEditingController..addListener(onSearchTextChanges);
 
     hintText = widget.hintText;
 
@@ -169,10 +169,8 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
       if (mounted) {
         setState(() {
           if (!visible) {
-            if (_textEditingController.text != null) {
-              sendSubmitResults(_textEditingController.text);
-            }
-            removeTextFieldFocus();
+            sendSubmitResults(widget.textEditingController.text);
+                      removeTextFieldFocus();
             if (widget.hideHintOnTextInputFocus) {
               setState(() {
                 hintText = widget.hintText;
@@ -199,7 +197,7 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
 
   @override
   void dispose() {
-    _textEditingController.dispose();
+    widget.textEditingController.dispose();
     super.dispose();
   }
 
@@ -208,25 +206,18 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
     String textBefore = "";
     String textAfter = "";
     try {
-      String lowerCaseResult =
-          widget.caseSensitive ? result : result.toLowerCase();
+      String lowerCaseResult = widget.caseSensitive ? result : result.toLowerCase();
       String lowerCaseSearchText = widget.caseSensitive
-          ? _textEditingController.text
-          : _textEditingController.text.toLowerCase();
-      textSelected = result.substring(
-          lowerCaseResult.indexOf(lowerCaseSearchText),
-          lowerCaseResult.indexOf(lowerCaseSearchText) +
-              lowerCaseSearchText.length);
+          ? widget.textEditingController.text
+          : widget.textEditingController.text.toLowerCase();
+      textSelected = result.substring(lowerCaseResult.indexOf(lowerCaseSearchText),
+          lowerCaseResult.indexOf(lowerCaseSearchText) + lowerCaseSearchText.length);
       String loserCaseTextSelected =
           widget.caseSensitive ? textSelected : textSelected.toLowerCase();
-      textBefore =
-          result.substring(0, lowerCaseResult.indexOf(loserCaseTextSelected));
-      if (lowerCaseResult.indexOf(loserCaseTextSelected) + textSelected.length <
-          result.length) {
+      textBefore = result.substring(0, lowerCaseResult.indexOf(loserCaseTextSelected));
+      if (lowerCaseResult.indexOf(loserCaseTextSelected) + textSelected.length < result.length) {
         textAfter = result.substring(
-            lowerCaseResult.indexOf(loserCaseTextSelected) +
-                textSelected.length,
-            result.length);
+            lowerCaseResult.indexOf(loserCaseTextSelected) + textSelected.length, result.length);
       }
     } catch (e) {
       print(e.toString());
@@ -234,10 +225,10 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
     return Container(
       alignment: Alignment.centerLeft,
       child: RichText(
-        text: _textEditingController.text.length > 0
+        text: widget.textEditingController.text.length > 0
             ? TextSpan(
                 children: [
-                  if (_textEditingController.text.length > 0)
+                  if (widget.textEditingController.text.length > 0)
                     TextSpan(
                       text: textBefore,
                       style: TextStyle(
@@ -305,7 +296,7 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
                   autocorrect: widget.autoCorrect,
                   enabled: widget.enabled,
                   onEditingComplete: () {
-                    sendSubmitResults(_textEditingController.text);
+                    sendSubmitResults(widget.textEditingController.text);
                     removeTextFieldFocus();
                   },
                   onSubmitted: (value) {
@@ -316,15 +307,14 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
                       isItemClicked = false;
                     });
                   },
-                  controller: _textEditingController,
+                  controller: widget.textEditingController,
                   decoration: InputDecoration(
                     hintText: hintText,
                     hintStyle: TextStyle(
                       color: widget.hintTextColor,
                     ),
                     contentPadding: EdgeInsets.symmetric(
-                        vertical: widget.verticalPadding,
-                        horizontal: widget.horizontalPadding),
+                        vertical: widget.verticalPadding, horizontal: widget.horizontalPadding),
                     disabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                           color: widget.disabledBorderColor != null
@@ -362,27 +352,21 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
                   style: TextStyle(
                     fontSize: widget.fontSize,
                   ),
-                  cursorColor: widget.cursorColor != null
-                      ? widget.cursorColor
-                      : Colors.grey[600],
+                  cursorColor: widget.cursorColor != null ? widget.cursorColor : Colors.grey[600],
                 ),
-                widget.clearSearchEnabled &&
-                        _textEditingController.text.length > 0
+                widget.clearSearchEnabled && widget.textEditingController.text.length > 0
                     ? Positioned(
                         right: 0,
                         top: 0,
                         bottom: 0,
                         left: 0,
                         child: Align(
-                          alignment: isLtr
-                              ? Alignment.centerRight
-                              : Alignment.centerLeft,
+                          alignment: isLtr ? Alignment.centerRight : Alignment.centerLeft,
                           child: InkWell(
                             onTap: () {
-                              if (_textEditingController.text.length == 0)
-                                return;
+                              if (widget.textEditingController.text.length == 0) return;
                               setState(() {
-                                _textEditingController.clear();
+                                widget.textEditingController.clear();
                                 widget.onSearchClear();
                                 isItemClicked = true;
                               });
@@ -392,7 +376,7 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
                               child: Icon(
                                 Icons.close,
                                 size: 20,
-                                color: _textEditingController.text.length == 0
+                                color: widget.textEditingController.text.length == 0
                                     ? Colors.grey[300]
                                     : Colors.grey,
                               ),
@@ -414,11 +398,9 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
                   return GestureDetector(
                     onTap: () {
                       String value = results[index];
-                      widget.onItemTap(
-                          widget.searchItems.indexOf(value), value);
-                      _textEditingController.text = value;
-                      _textEditingController.selection =
-                          TextSelection.fromPosition(
+                      widget.onItemTap(widget.searchItems.indexOf(value), value);
+                      widget.textEditingController.text = value;
+                      widget.textEditingController.selection = TextSelection.fromPosition(
                         TextPosition(
                           offset: value.length,
                         ),
@@ -438,25 +420,17 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
                               shape: CustomRoundedRectangleBorder(
                                 borderRadius: BorderRadius.only(
                                   bottomLeft: Radius.circular(
-                                    index == (results.length - 1)
-                                        ? widget.borderRadius
-                                        : 0.0,
+                                    index == (results.length - 1) ? widget.borderRadius : 0.0,
                                   ),
                                   bottomRight: Radius.circular(
-                                    index == (results.length - 1)
-                                        ? widget.borderRadius
-                                        : 0.0,
+                                    index == (results.length - 1) ? widget.borderRadius : 0.0,
                                   ),
                                 ),
                                 leftSide: BorderSide(color: widget.borderColor),
-                                bottomLeftCornerSide:
-                                    BorderSide(color: widget.borderColor),
-                                rightSide:
-                                    BorderSide(color: widget.borderColor),
-                                bottomRightCornerSide:
-                                    BorderSide(color: widget.borderColor),
-                                bottomSide:
-                                    BorderSide(color: widget.borderColor),
+                                bottomLeftCornerSide: BorderSide(color: widget.borderColor),
+                                rightSide: BorderSide(color: widget.borderColor),
+                                bottomRightCornerSide: BorderSide(color: widget.borderColor),
+                                bottomSide: BorderSide(color: widget.borderColor),
                               ),
                             ),
                           ),
@@ -470,8 +444,7 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
   }
 
   void onSearchTextChanges() {
-    if (lastSubmittedText == _textEditingController.text &&
-        isItemClicked == true) {
+    if (lastSubmittedText == widget.textEditingController.text && isItemClicked == true) {
       setState(() {
         isItemClicked = false;
       });
@@ -480,22 +453,21 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
     setState(() {
       isItemClicked = false;
     });
-    if (_textEditingController.text.length < widget.minLettersForSearch) {
+    if (widget.textEditingController.text.length < widget.minLettersForSearch) {
       setState(() {
         results = [];
       });
     } else {
       String searchText = widget.caseSensitive
-          ? _textEditingController.text
-          : _textEditingController.text.toLowerCase();
+          ? widget.textEditingController.text
+          : widget.textEditingController.text.toLowerCase();
       switch (widget.searchMode) {
         case SearchMode.STARTING_WITH:
           setState(() {
             results = widget.searchItems
                 .where(
-                  (element) =>
-                      (widget.caseSensitive ? element : element.toLowerCase())
-                          .startsWith(searchText),
+                  (element) => (widget.caseSensitive ? element : element.toLowerCase())
+                      .startsWith(searchText),
                 )
                 .toList();
           });
@@ -505,8 +477,7 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
             results = widget.searchItems
                 .where(
                   (element) =>
-                      (widget.caseSensitive ? element : element.toLowerCase())
-                          .contains(searchText),
+                      (widget.caseSensitive ? element : element.toLowerCase()).contains(searchText),
                 )
                 .toList();
           });
@@ -516,10 +487,7 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
             results = widget.searchItems
                 .where(
                   (element) =>
-                      (widget.caseSensitive
-                          ? element
-                          : element.toLowerCase()) ==
-                      searchText,
+                      (widget.caseSensitive ? element : element.toLowerCase()) == searchText,
                 )
                 .toList();
           });
@@ -533,7 +501,7 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
     }
     // now send the latest updates
     if (widget.onEditingProgress != null) {
-      widget.onEditingProgress!(_textEditingController.text, results);
+      widget.onEditingProgress!(widget.textEditingController.text, results);
     }
   }
 
