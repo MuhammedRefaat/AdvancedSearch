@@ -3,10 +3,10 @@ import 'package:flutter/cupertino.dart';
 class KeyboardVisibilityBuilder extends StatefulWidget {
   final Widget? child;
   final Widget Function(
-      BuildContext context,
-      Widget? child,
-      bool isKeyboardVisible,
-      ) builder;
+    BuildContext context,
+    Widget? child,
+    bool isKeyboardVisible,
+  ) builder;
 
   const KeyboardVisibilityBuilder({
     Key? key,
@@ -25,18 +25,18 @@ class _KeyboardVisibilityBuilderState extends State<KeyboardVisibilityBuilder>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance!.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
   @override
   void didChangeMetrics() {
-    final bottomInset = WidgetsBinding.instance!.window.viewInsets.bottom;
+    final bottomInset = View.of(context).viewInsets.bottom;
     final newValue = bottomInset > 0.0;
     if (newValue != _isKeyboardVisible) {
       setState(() {
@@ -47,10 +47,10 @@ class _KeyboardVisibilityBuilderState extends State<KeyboardVisibilityBuilder>
 
   @override
   Widget build(BuildContext context) => widget.builder(
-    context,
-    widget.child,
-    _isKeyboardVisible,
-  );
+        context,
+        widget.child,
+        _isKeyboardVisible,
+      );
 }
 
 //// code for handling the hidden state correctly

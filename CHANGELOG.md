@@ -1,5 +1,5 @@
 ## [2.2.5] - 14/5/2025
-- Adding text editing controller as an optional variable for better user control
+- Adding [textEditingController] as an optional parameter for better user control
 
 ## [2.2.4] - 18/7/2024
 - Updates for app dependencies
