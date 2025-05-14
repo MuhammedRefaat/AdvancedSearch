@@ -101,6 +101,7 @@ class AdvancedSearch extends StatefulWidget {
 
   final bool autoListing;
 
+  /// Can optionally use it for input text controller
   final TextEditingController textEditingController;
 
   AdvancedSearch({
@@ -170,7 +171,7 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
         setState(() {
           if (!visible) {
             sendSubmitResults(widget.textEditingController.text);
-                      removeTextFieldFocus();
+            removeTextFieldFocus();
             if (widget.hideHintOnTextInputFocus) {
               setState(() {
                 hintText = widget.hintText;
@@ -233,27 +234,21 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
                       text: textBefore,
                       style: TextStyle(
                         fontSize: widget.fontSize,
-                        color: widget.unSelectedTextColor != null
-                            ? widget.unSelectedTextColor
-                            : Colors.grey[400],
+                        color: widget.unSelectedTextColor ?? Colors.grey[400],
                       ),
                     ),
                   TextSpan(
                     text: textSelected,
                     style: TextStyle(
                       fontSize: widget.fontSize,
-                      color: widget.selectedTextColor != null
-                          ? widget.selectedTextColor
-                          : Colors.black,
+                      color: widget.selectedTextColor ?? Colors.black,
                     ),
                   ),
                   TextSpan(
                     text: textAfter,
                     style: TextStyle(
                       fontSize: widget.fontSize,
-                      color: widget.unSelectedTextColor != null
-                          ? widget.unSelectedTextColor
-                          : Colors.grey[400],
+                      color: widget.unSelectedTextColor ?? Colors.grey[400],
                     ),
                   )
                 ],
@@ -262,9 +257,7 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
                 text: result,
                 style: TextStyle(
                   fontSize: widget.fontSize,
-                  color: widget.unSelectedTextColor != null
-                      ? widget.unSelectedTextColor
-                      : Colors.grey[400],
+                  color: widget.unSelectedTextColor ?? Colors.grey[400],
                 ),
               ),
       ),
@@ -316,29 +309,22 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
                     contentPadding: EdgeInsets.symmetric(
                         vertical: widget.verticalPadding, horizontal: widget.horizontalPadding),
                     disabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                          color: widget.disabledBorderColor != null
-                              ? widget.disabledBorderColor!
-                              : Colors.grey[300]!),
+                      borderSide:
+                          BorderSide(color: widget.disabledBorderColor ?? Colors.grey[300]!),
                       borderRadius: BorderRadius.all(
                         Radius.circular(widget.borderRadius),
                       ),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: widget.enabledBorderColor != null
-                            ? widget.enabledBorderColor!
-                            : Colors.grey[300]!,
+                        color: widget.enabledBorderColor ?? Colors.grey[300]!,
                       ),
                       borderRadius: BorderRadius.all(
                         Radius.circular(widget.borderRadius),
                       ),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                          color: widget.focusedBorderColor != null
-                              ? widget.focusedBorderColor!
-                              : Colors.grey[300]!),
+                      borderSide: BorderSide(color: widget.focusedBorderColor ?? Colors.grey[300]!),
                       borderRadius: results.length == 0 || isItemClicked
                           ? BorderRadius.all(
                               Radius.circular(widget.borderRadius),
@@ -352,7 +338,7 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
                   style: TextStyle(
                     fontSize: widget.fontSize,
                   ),
-                  cursorColor: widget.cursorColor != null ? widget.cursorColor : Colors.grey[600],
+                  cursorColor: widget.cursorColor ?? Colors.grey[600],
                 ),
                 widget.clearSearchEnabled && widget.textEditingController.text.length > 0
                     ? Positioned(
