@@ -1,3 +1,6 @@
+## [2.2.6] - 14/5/2025
+- Bug fix related to text controller
+
 ## [2.2.5] - 14/5/2025
 - Adding [textEditingController] as an optional parameter for better user control
 
