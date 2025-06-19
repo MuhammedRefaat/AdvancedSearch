@@ -198,7 +198,6 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
 
   @override
   void dispose() {
-    widget.textEditingController.dispose();
     super.dispose();
   }
 
