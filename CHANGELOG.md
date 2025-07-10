@@ -1,3 +1,6 @@
+## [2.2.6+1] - 10/7/2025
+- Adding facts on top of the package
+
 ## [2.2.6] - 14/5/2025
 - Bug fix related to text controller
 
