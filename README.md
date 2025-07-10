@@ -1,5 +1,8 @@
 # AdvancedSearch
-Flutter library provides advanced capabilitis for searching through a predefined list using TextField
+
+[![Stand With Palestine](https://raw.githubusercontent.com/TheBSD/StandWithPalestine/main/banner-no-action.svg)](https://thebsd.github.io/StandWithPalestine)
+
+Flutter library provides advanced capabilities for searching through a predefined list using TextField
 
 <img src="https://media.giphy.com/media/rNgQ0GRShKMNGU24HM/giphy.gif" height="500" />
 
