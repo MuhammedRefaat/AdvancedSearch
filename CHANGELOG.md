@@ -1,3 +1,6 @@
+## [2.3.0+1] - 21/1/2026
+- Fix the example as per new package updates
+
 ## [2.3.0] - 21/1/2026
 - Making text controller mandatory to overcome layout rebuild states in a lot of applications.
 - Making sure to remove the controller listener with view dispose to avoid memory leaks
