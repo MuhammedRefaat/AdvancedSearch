@@ -6,6 +6,8 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -18,6 +20,9 @@ class MyApp extends StatelessWidget {
 }
 
 class HomePage extends StatelessWidget {
+
+  final TextEditingController _searchController = TextEditingController();
+
   final List<String> searchableList = [
     "Orange",
     "Apple",
@@ -41,6 +46,7 @@ class HomePage extends StatelessWidget {
         margin: const EdgeInsets.only(top: 30.0, left: 30, right: 30),
         child: AdvancedSearch(
           searchItems: searchableList,
+          textEditingController: _searchController,
           maxElementsToDisplay: 10,
           singleItemHeight: 50,
           borderColor: Colors.grey,
