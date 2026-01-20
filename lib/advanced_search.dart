@@ -198,6 +198,8 @@ class _AdvancedSearchState extends State<AdvancedSearch> {
 
   @override
   void dispose() {
+    // Disposing the controller to prevent memory leaks
+    widget.textEditingController.removeListener(onSearchTextChanges);
     super.dispose();
   }
 
