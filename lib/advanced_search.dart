@@ -101,12 +101,13 @@ class AdvancedSearch extends StatefulWidget {
 
   final bool autoListing;
 
-  /// Can optionally use it for input text controller
+  /// Has to be used in order to overcome layout rebuild states in a lot of applications
   final TextEditingController textEditingController;
 
   AdvancedSearch({
     required this.searchItems,
     required this.onItemTap,
+    required this.textEditingController,
     this.maxElementsToDisplay = 7,
     this.onSearchClear = _searchClearDefaultFunction,
     this.selectedTextColor,
@@ -138,8 +139,7 @@ class AdvancedSearch extends StatefulWidget {
     this.horizontalPadding = 10,
     this.searchItemsWidget,
     this.autoListing = false,
-    TextEditingController? textEditingController,
-  }) : this.textEditingController = textEditingController ?? TextEditingController();
+  });
 
   @override
   _AdvancedSearchState createState() => _AdvancedSearchState();
